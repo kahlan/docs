@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Kahlan</title>
+
+        <link rel="stylesheet" href="http://kahlan.github.io/docs/css/bootstrap.min.css">
+        <link rel="stylesheet" href="http://kahlan.github.io/docs/css/font-awesome.min.css">
+        <link rel="stylesheet" href="http://kahlan.github.io/docs/css/highlight.dark.css">
+        <link rel="stylesheet" href="http://kahlan.github.io/docs/css/main.css">
+    </head>
+    <body>
+
+                    <a href="https://github.com/kahlan/kahlan" style="position: fixed; top: 0; right: 0; border: 0; z-index:1">
+                <img src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png">
+            </a>
+        
+        <main class="container-fluid">
+            <div class="row">
+
+                
+                    <nav id="sidebar" class="col-sm-3 col-lg-2" role="navigation">
+
+                        <ul class="nav nav-pills nav-stacked">
+                                                            <li class="active">
+                                    <a href="http://kahlan.github.io/docs/index.html">
+                                        Overview
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/getting-started.html">
+                                        Getting Started
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/dsl.html">
+                                        DSL
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/matchers.html">
+                                        Matchers
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/allow.html">
+                                        Method Stubbing & Monkey Patching
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/test-double.html">
+                                        Test Double
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/quit.html">
+                                        Quit
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/cli-options.html">
+                                        CLI Options
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/reporters.html">
+                                        Reporters
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/pro-tips.html">
+                                        Pro Tips
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/config-file.html">
+                                        Kahlan-config.php
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/integration.html">
+                                        Integration with popular frameworks
+                                    </a>
+                                </li>
+                                                    </ul>
+
+                    </nav>
+
+                
+                <section id="content" class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
+                    <h2 id="integration-with-popular-frameworks">Integration with popular frameworks</h2>
+<p>Kahlan relies on the Composer autoloader. As such, it is compatible with most frameworks. However a couple popular frameworks use their own autoloader, so you will need to add your namespaces to be autoloaded correctly in the test environment.</p>
+<p>You will need to configure your Kahlan config file to manually add to the Composer autoloader which are &quot;outside the composer scope&quot;.</p>
+<h3 id="working-with-a-psr-0-compatible-architecture">Working with a PSR-0 compatible architecture.</h3>
+<p>Let's take a situation where you have the following directories: <code>app/models/</code> and  <code>app/controllers/</code> and each one are respectively attached to the <code>Api\Models</code> and <code>Api\Controllers</code> namespaces. To autoload them with Kahlan you will need to manually add these PSR-4 namespaces in your <strong>kahlan-config.php</strong> config file:</p>
+<pre><code class="language-php">use Kahlan\Filter\Filter;
+
+Filter::register('mycustom.namespaces', function($chain) {
+
+  $this-&gt;autoloader()-&gt;addPsr4('Api\\Models\\', __DIR__ . '/app/models/');
+  $this-&gt;autoloader()-&gt;addPsr4('Api\\Controllers\\', __DIR__ . '/app/controllers/');
+  return $chain-&gt;next();
+
+});
+
+Filter::apply($this, 'namespaces', 'mycustom.namespaces');</code></pre>
+<h3 id="laravel">Laravel</h3>
+<p>To import all Laravel &quot;test facilities&quot; into Kahlan you can make use of <a href="https://github.com/jarektkaczyk/laravel-kahlan">this dedicated plugin</a>.</p>
+<h3 id="phalcon">Phalcon</h3>
+<p>When a class extends a built-in class (i.e. a non PHP class) it's not possible to stub parent class methods since they are not in PHP userland.</p>
+<p>Long story short, let's take the following example as an illustration:</p>
+<p>We have a model:</p>
+<pre><code class="language-php">namespace Api\Models;
+
+class MyModel extends \Phalcon\Mvc\Model
+{
+}</code></pre>
+<p>And we want <code>findFirst()</code> to return a stubbed result. This can be translated into the following spec:</p>
+<pre><code class="language-php">namespace Api\Spec\Contollers;
+
+use Api\Models\MyModel;
+
+describe("MyModel", function() {
+
+    it("stubs findFirst as an example", function() {
+
+        $article = new MyModel();
+
+        allow('Api\Models\MyModel')-&gt;toReceive('::findFirst')-&gt;andReturn($article);
+
+        $actual = MyModel::findFirst();
+
+        expect($actual)-&gt;toBe($article);
+
+    });
+
+});</code></pre>
+<p>Unfortunately it doesn't work out of the box because <code>MyModel</code> extends <code>Phalcon\Mvc\Model</code> which is a core class (i.e a class compiled from C sources). So <code>MyModel::findFirst()</code> doesn't exist in PHP userland and can't be stubbed.</p>
+<p>The workaround here is to add the Kahlan's <code>Layer</code> patcher in <a href="config-file.html">your <code>kahlan-config.php</code> file</a>. The <code>Layer</code> patcher will dynamically replace all <code>extends</code> done on core class to an intermediate layer class in PHP.</p>
+<p>So for our example above, the <code>Layer</code> patcher can be configured like the following in <a href="config-file.html">your <code>kahlan-config.php</code> file</a>:</p>
+<pre><code class="language-php">use Kahlan\Filter\Filter;
+use Kahlan\Jit\Interceptor;
+use Kahlan\Plugin\Layer;
+
+Filter::register('api.patchers', function($chain) {
+    $interceptor = Interceptor::instance();
+    $patchers = $interceptor-&gt;patchers();
+    $patchers-&gt;add('layer', new Layer([
+        'override' =&gt; [
+            'Phalcon\Mvc\Model' // apply a layer on top of all classes extending `Phalcon\Mvc\Model`.
+        ]
+    ]));
+
+    return $chain-&gt;next();
+});
+
+Filter::apply($this, 'patchers', 'api.patchers');</code></pre>
+<p><strong>Note:</strong> You will probably need to remove all cached files using <code>kahlan --cc</code>.</p>
+<h3 id="working-with-a-custom-autoloader-not-compatible-with-psr-0">Working with a custom autoloader not compatible with PSR-0.</h3>
+<p>In this case your must implement a <code>PSR-0</code> <strong>Composer</strong> compatible autoloader. To have a right direction you could see at <a href="https://github.com/composer/composer/blob/master/src/Composer/Autoload/ClassLoader.php">sources</a>, and take care of <code>findFile</code>, <code>loadClass</code> and <code>add</code> functions.</p>
+                </section>
+
+            </div>
+        </main>
+
+        <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+        <script src="//yastatic.net/highlightjs/8.2/highlight.min.js"></script>
+
+        <script>
+            $(function() {
+                $("section>h1").wrap('<div class="page-header" />');
+                // Syntax highlighting
+                hljs.initHighlightingOnLoad();
+            });
+        </script>
+
+    </body>
+</html>

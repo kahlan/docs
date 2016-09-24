@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Kahlan</title>
+
+        <link rel="stylesheet" href="http://kahlan.github.io/docs/css/bootstrap.min.css">
+        <link rel="stylesheet" href="http://kahlan.github.io/docs/css/font-awesome.min.css">
+        <link rel="stylesheet" href="http://kahlan.github.io/docs/css/highlight.dark.css">
+        <link rel="stylesheet" href="http://kahlan.github.io/docs/css/main.css">
+    </head>
+    <body>
+
+                    <a href="https://github.com/kahlan/kahlan" style="position: fixed; top: 0; right: 0; border: 0; z-index:1">
+                <img src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png">
+            </a>
+        
+        <main class="container-fluid">
+            <div class="row">
+
+                
+                    <nav id="sidebar" class="col-sm-3 col-lg-2" role="navigation">
+
+                        <ul class="nav nav-pills nav-stacked">
+                                                            <li class="active">
+                                    <a href="http://kahlan.github.io/docs/index.html">
+                                        Overview
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/getting-started.html">
+                                        Getting Started
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/dsl.html">
+                                        DSL
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/matchers.html">
+                                        Matchers
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/allow.html">
+                                        Method Stubbing & Monkey Patching
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/test-double.html">
+                                        Test Double
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/quit.html">
+                                        Quit
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/cli-options.html">
+                                        CLI Options
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/reporters.html">
+                                        Reporters
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/pro-tips.html">
+                                        Pro Tips
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/config-file.html">
+                                        Kahlan-config.php
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/integration.html">
+                                        Integration with popular frameworks
+                                    </a>
+                                </li>
+                                                    </ul>
+
+                    </nav>
+
+                
+                <section id="content" class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
+                    <h2 id="dsl">DSL</h2>
+<h3 id="describe-your-specs">Describe Your Specs</h3>
+<p>Because test organization is one of the key point of keeping clean and maintainable tests, Kahlan allow to group tests syntactically using a closure syntax.</p>
+<pre><code class="language-php">describe("ToBe", function() {
+    describe("::match()", function() {
+        it("passes if true === true", function() {
+            expect(true)-&gt;toBe(true);
+        });
+    });
+});</code></pre>
+<ul>
+<li><code>describe</code>: generally contains all specs for a method. Using the class method's name is probably the best option for a clean description.</li>
+<li><code>context</code>: is used to group tests related to a specific use case. Using &quot;when&quot; or &quot;with&quot; followed by the description of the use case is generally a good practice.</li>
+<li><code>it</code>: contains the code to test. Keep its description short and clear.</li>
+</ul>
+<h3 id="setup-and-teardown">Setup and Teardown</h3>
+<p>As the name implies, the <code>beforeEach</code> function is called once before <strong>each</strong> spec contained in a <code>describe</code>.</p>
+<pre><code class="language-php">describe("Setup and Teardown", function() {
+    beforeEach(function() {
+        $this-&gt;foo = 1;
+    });
+
+    describe("Nested level", function() {
+        beforeEach(function() {
+            $this-&gt;foo++;
+        });
+
+        it("expects that the foo variable is equal to 2", function() {
+            expect($this-&gt;foo)-&gt;toBe(2);
+        });
+    });
+});</code></pre>
+<p>Setup and Teardown functions can be used at any <code>describe</code> or <code>context</code> level:</p>
+<ul>
+<li><code>beforeAll</code>: Run once inside a <code>describe</code> or <code>context</code> before all contained specs.</li>
+<li><code>beforeEach</code>: Run before each spec of the same level.</li>
+<li><code>afterEach</code>: Run after each spec of the same level.</li>
+<li><code>afterAll</code>: Run once inside a <code>describe</code> or <code>context</code> after all contained specs.</li>
+</ul>
+<h3 id="memoized-helper-using">Memoized Helper using <code>given()</code></h3>
+<p>Since <code>beforeEach()</code> is ran before each spec, all defined variables are reinitialised on each specs even when not needed. So in this case it's possible to use <code>given()</code> instead. Given's blocks are only executed when referenced (i.e. lazy loading), which mean that ordering of these blocks are irrelevant.</p>
+<pre><code class="language-php">describe("Lazy loadable variables", function() {
+    given('firstname', function() { return 'Johnny'; });
+    given('fullname', function() {
+        return "{$this-&gt;firstname} {$this-&gt;lastname}";
+    });
+    given('lastname', function() { return 'Boy'; });
+
+    it("lazy loads variables in cascades", function() {
+        expect($this-&gt;fullname)-&gt;toBe('Johnny Boy');
+    });
+});</code></pre>
+<h3 id="expectations">Expectations</h3>
+<p>Expectations are built using the <code>expect</code> function which takes a value, called the <strong>actual</strong>, as parameter and chained with a matcher function taking the <strong>expected</strong> value and some optional extra arguments as parameters.</p>
+<pre><code class="language-php">describe("Positive Expectation", function() {
+    it("expects that 5 &gt; 4", function() {
+        expect(5)-&gt;toBeGreaterThan(4);
+    });
+});</code></pre>
+<p>You can find <a href="matchers.html">all built-in matchers here</a>.</p>
+<h3 id="negative-expectations">Negative Expectations</h3>
+<p>Any matcher can be evaluated negatively by chaining <code>expect</code> with <code>not</code> before calling the matcher:</p>
+<pre><code class="language-php">describe("Negative Expectation", function() {
+    it("doesn't expect that 4 &gt; 5", function() {
+        expect(4)-&gt;not-&gt;toBeGreaterThan(5);
+    });
+});</code></pre>
+<h3 id="asynchronous-expectations">Asynchronous Expectations</h3>
+<p>To perform some asynchronous tests it's possible to use the <code>waitsFor</code> statement. This statement runs a passed closure until all contained expectations passes or a timeout is reached. <code>waitsFor</code> can be useful to waits for elements to appear/disappear on a browser page during some functional testing for example.</p>
+<pre><code class="language-php">describe("Asynchronous Expectations", function() {
+    it("will timeout for sure", function() {
+        waitsFor(function() {
+            expect(false)-&gt;toBe(true);
+        });
+    });
+
+    it("waits to be lucky", function() {
+        waitsFor(function() {
+            return mt_rand(0, 10);
+        })-&gt;toBe(10);
+    });
+}, 10);</code></pre>
+<p>In the example above, the timeout has been set globally at the bottom of <code>describe()</code> statement. However it can also be overridden at a <code>context()/it()</code> level or simply by setting the second parameter of <code>waitsFor()</code>. If no timeout is defined, the default timeout will be set to <code>0</code>.</p>
+<h3 id="variable-scope">Variable scope</h3>
+<p>You can use <code>$this</code> for making a variable <strong>available</strong> for a sub scope:</p>
+<pre><code class="language-php">describe("Scope inheritance", function() {
+    beforeEach(function() {
+        $this-&gt;foo = 5;
+    });
+
+    it("accesses variable defined in the parent scope", function() {
+        expect($this-&gt;foo)-&gt;toEqual(5);
+    });
+});</code></pre>
+<p>You can also play with scope's data inside closures:</p>
+<pre><code class="language-php">describe("Scope inheritance &amp; closure", function() {
+    it("sets a scope variables inside a closure", function() {
+        $this-&gt;closure = function() {
+            $this-&gt;foo = 'bar';
+        };
+        $this-&gt;closure();
+        expect($this-&gt;foo)-&gt;toEqual('bar');
+    });
+
+    it("gets a scope variable inside closure", function() {
+        $this-&gt;foo = 'bar';
+        $this-&gt;closure = function() {
+            return $this-&gt;foo;
+        };
+        expect($this-&gt;closure())-&gt;toEqual('bar');
+    });
+});</code></pre>
+<h4 id="scope-isolation">Scope isolation</h4>
+<p><strong>Note:</strong> A variable assigned with <code>$this</code> inside either a <code>describe/context</code> or an <code>it</code> will <strong>not</strong> be available to a parent scope.</p>
+<pre><code class="language-php">describe("Scope isolation", function() {
+    it("sets a variable in the scope", function() {
+        $this-&gt;foo = 2;
+        expect($this-&gt;foo)-&gt;toEqual(2);
+    });
+
+    it("doesn't find any foo variable in the scope", function() {
+        expect(isset($this-&gt;foo))-&gt;toBe(false);
+    });
+});</code></pre>
+<h3 id="control-flow">Control-flow</h3>
+<p>Spec control flow is similar to <code>Jasmine</code>. In other words functions executed on a scope level using the following order <code>beforeAll</code>, <code>beforeEach</code>, <code>afterAll</code> and <code>afterEach</code>.</p>
+<pre><code class="language-php">describe(function() {
+    beforeAll(function() {
+       //b1
+    });
+
+    describe(function() {
+        beforeAll(function() {
+           //b2
+        });
+
+        beforeEach(function() {
+           //be1
+        });
+
+        it("runs a spec", function() {
+           //it1
+        });
+
+        it("runs a spec", function() {
+           //it2
+        });
+
+        afterEach(function() {
+           //ae1
+        });
+
+        afterAll(function() {
+           //a2
+        });
+    });
+
+    afterAll(function() {
+       //a1
+    });
+});</code></pre>
+<p>That code will give a following execution flow: <code>b1 - b2 - be1 - it1 - ae1 - be1 - it2 - ae1 - a2 - a1</code></p>
+                </section>
+
+            </div>
+        </main>
+
+        <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+        <script src="//yastatic.net/highlightjs/8.2/highlight.min.js"></script>
+
+        <script>
+            $(function() {
+                $("section>h1").wrap('<div class="page-header" />');
+                // Syntax highlighting
+                hljs.initHighlightingOnLoad();
+            });
+        </script>
+
+    </body>
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Kahlan</title>
+
+        <link rel="stylesheet" href="http://kahlan.github.io/docs/css/bootstrap.min.css">
+        <link rel="stylesheet" href="http://kahlan.github.io/docs/css/font-awesome.min.css">
+        <link rel="stylesheet" href="http://kahlan.github.io/docs/css/highlight.dark.css">
+        <link rel="stylesheet" href="http://kahlan.github.io/docs/css/main.css">
+    </head>
+    <body>
+
+                    <a href="https://github.com/kahlan/kahlan" style="position: fixed; top: 0; right: 0; border: 0; z-index:1">
+                <img src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png">
+            </a>
+        
+        <main class="container-fluid">
+            <div class="row">
+
+                
+                    <nav id="sidebar" class="col-sm-3 col-lg-2" role="navigation">
+
+                        <ul class="nav nav-pills nav-stacked">
+                                                            <li class="active">
+                                    <a href="http://kahlan.github.io/docs/index.html">
+                                        Overview
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/getting-started.html">
+                                        Getting Started
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/dsl.html">
+                                        DSL
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/matchers.html">
+                                        Matchers
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/allow.html">
+                                        Method Stubbing & Monkey Patching
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/test-double.html">
+                                        Test Double
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/quit.html">
+                                        Quit
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/cli-options.html">
+                                        CLI Options
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/reporters.html">
+                                        Reporters
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/pro-tips.html">
+                                        Pro Tips
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/config-file.html">
+                                        Kahlan-config.php
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/integration.html">
+                                        Integration with popular frameworks
+                                    </a>
+                                </li>
+                                                    </ul>
+
+                    </nav>
+
+                
+                <section id="content" class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
+                    <h2 id="cli-options">CLI Options</h2>
+<p>Below are all of Kahlan's option obtained through the <code>kahlan --help</code> command line.</p>
+<pre><code>Configuration Options:
+
+  --config=&lt;file&gt;                     The PHP configuration file to use (default: `'kahlan-config.php'`).
+  --src=&lt;path&gt;                        Paths of source directories (default: `['src']`).
+  --spec=&lt;path&gt;                       Paths of specification directories (default: `['spec']`).
+  --pattern=&lt;pattern&gt;                 A shell wildcard pattern (default: `'*Spec.php'`).
+
+Reporter Options:
+
+  --reporter=&lt;name&gt;[:&lt;output_file&gt;]   The name of the text reporter to use, the built-in text reporters
+                                      are `'dot'`, `'bar'`, `'json'`, `'tap'` &amp; `'verbose'` (default: `'dot'`).
+                                      You can optionally redirect the reporter output to a file by using the
+                                      colon syntax (multiple --reporter options are also supported).
+
+Code Coverage Options:
+
+  --coverage=&lt;integer|string&gt;         Generate code coverage report. The value specify the level of
+                                      detail for the code coverage report (0-4). If a namespace, class, or
+                                      method definition is provided, it will generate a detailed code
+                                      coverage of this specific scope (default `''`).
+  --clover=&lt;file&gt;                     Export code coverage report into a Clover XML format.
+  --istanbul=&lt;file&gt;                   Export code coverage report into an istanbul compatible JSON format.
+  --lcov=&lt;file&gt;                       Export code coverage report into a lcov compatible text format.
+
+Test Execution Options:
+
+  --ff=&lt;integer&gt;                      Fast fail option. `0` mean unlimited (default: `0`).
+  --no-colors=&lt;boolean&gt;               To turn off colors. (default: `false`).
+  --no-header=&lt;boolean&gt;               To turn off header. (default: `false`).
+  --include=&lt;string&gt;                  Paths to include for patching. (default: `['*']`).
+  --exclude=&lt;string&gt;                  Paths to exclude from patching. (default: `[]`).
+  --persistent=&lt;boolean&gt;              Cache patched files (default: `true`).
+  --cc=&lt;boolean&gt;                      Clear cache before spec run. (default: `false`).
+  --autoclear                         Classes to autoclear after each spec (default: [
+                                          `'Kahlan\Plugin\Monkey'`,
+                                          `'Kahlan\Plugin\Call'`,
+                                          `'Kahlan\Plugin\Stub'`,
+                                          `'Kahlan\Plugin\Quit'`
+                                      ])
+
+Miscellaneous Options:
+
+  --help                 Prints this usage information.
+  --version              Prints Kahlan version
+
+Note: The `[]` notation in default values mean that the related option can accepts an array of values.
+To add additional values, just repeat the same option many times in the command line.</code></pre>
+                </section>
+
+            </div>
+        </main>
+
+        <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+        <script src="//yastatic.net/highlightjs/8.2/highlight.min.js"></script>
+
+        <script>
+            $(function() {
+                $("section>h1").wrap('<div class="page-header" />');
+                // Syntax highlighting
+                hljs.initHighlightingOnLoad();
+            });
+        </script>
+
+    </body>
+</html>

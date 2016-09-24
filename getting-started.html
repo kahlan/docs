@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Kahlan</title>
+
+        <link rel="stylesheet" href="http://kahlan.github.io/docs/css/bootstrap.min.css">
+        <link rel="stylesheet" href="http://kahlan.github.io/docs/css/font-awesome.min.css">
+        <link rel="stylesheet" href="http://kahlan.github.io/docs/css/highlight.dark.css">
+        <link rel="stylesheet" href="http://kahlan.github.io/docs/css/main.css">
+    </head>
+    <body>
+
+                    <a href="https://github.com/kahlan/kahlan" style="position: fixed; top: 0; right: 0; border: 0; z-index:1">
+                <img src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png">
+            </a>
+        
+        <main class="container-fluid">
+            <div class="row">
+
+                
+                    <nav id="sidebar" class="col-sm-3 col-lg-2" role="navigation">
+
+                        <ul class="nav nav-pills nav-stacked">
+                                                            <li class="active">
+                                    <a href="http://kahlan.github.io/docs/index.html">
+                                        Overview
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/getting-started.html">
+                                        Getting Started
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/dsl.html">
+                                        DSL
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/matchers.html">
+                                        Matchers
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/allow.html">
+                                        Method Stubbing & Monkey Patching
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/test-double.html">
+                                        Test Double
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/quit.html">
+                                        Quit
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/cli-options.html">
+                                        CLI Options
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/reporters.html">
+                                        Reporters
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/pro-tips.html">
+                                        Pro Tips
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/config-file.html">
+                                        Kahlan-config.php
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/integration.html">
+                                        Integration with popular frameworks
+                                    </a>
+                                </li>
+                                                    </ul>
+
+                    </nav>
+
+                
+                <section id="content" class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
+                    <h2 id="getting-started">Getting Started</h2>
+<p><a name="requirements"></a></p>
+<h3 id="requirements">Requirements</h3>
+<ul>
+<li>PHP 5.5+</li>
+<li><a href="http://php.net/manual/en/debugger-about.php">phpdbg</a> or <a href="http://xdebug.org/">Xdebug</a> (only required for code coverage analysis)</li>
+</ul>
+<p><a name="installation"></a></p>
+<h3 id="installation">Installation</h3>
+<p>The recommended way to install Kahlan is with <a href="http://getcomposer.org/">Composer</a> as a <em>development</em> dependency of your project.</p>
+<pre><code class="language-bash">composer require --dev kahlan/kahlan</code></pre>
+<p>Alternatively, you may manually add <code>"kahlan/kahlan": "~3.0"</code> to the <code>require-dev</code> dependencies within your <code>composer.json</code>.</p>
+<p><a name="running-kahlan"></a></p>
+<h2 id="running-kahlan">Running Kahlan</h2>
+<p>Once Kahlan is installed, you can run your tests (referred to as <em>specs</em>) with:</p>
+<pre><code class="language-bash">./bin/kahlan</code></pre>
+<p>For a full list of the options, see the <a href="cli-options.html">CLI Options</a>.</p>
+<p><a name="directory-structure"></a></p>
+<h3 id="directory-structure">Directory Structure</h3>
+<p>The recommended directory structure is to add a <code>spec</code> directory at the top level of your project. You may then place your <em>Spec</em> files within this directory. Spec files should have a <code>.spec.php</code> or <code>Spec.php</code> suffix. The <code>spec</code> directory should mirror the structure of your source code directory.</p>
+<p>An example directory structure would be:</p>
+<pre><code>├── spec                       # The directory containing your specs
+│   └── ClassA.spec.php
+│   └── subdir
+│       └── ClassB.spec.php
+├── src                        # The directory containing your source code
+│   └── ClassA.php
+│   └── subdir
+│       └── ClassB.php
+├── composer.json
+└── README.md</code></pre>
+                </section>
+
+            </div>
+        </main>
+
+        <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+        <script src="//yastatic.net/highlightjs/8.2/highlight.min.js"></script>
+
+        <script>
+            $(function() {
+                $("section>h1").wrap('<div class="page-header" />');
+                // Syntax highlighting
+                hljs.initHighlightingOnLoad();
+            });
+        </script>
+
+    </body>
+</html>

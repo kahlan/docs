@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Kahlan</title>
+
+        <link rel="stylesheet" href="http://kahlan.github.io/docs/css/bootstrap.min.css">
+        <link rel="stylesheet" href="http://kahlan.github.io/docs/css/font-awesome.min.css">
+        <link rel="stylesheet" href="http://kahlan.github.io/docs/css/highlight.dark.css">
+        <link rel="stylesheet" href="http://kahlan.github.io/docs/css/main.css">
+    </head>
+    <body>
+
+                    <a href="https://github.com/kahlan/kahlan" style="position: fixed; top: 0; right: 0; border: 0; z-index:1">
+                <img src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png">
+            </a>
+        
+        <main class="container-fluid">
+            <div class="row">
+
+                
+                    <nav id="sidebar" class="col-sm-3 col-lg-2" role="navigation">
+
+                        <ul class="nav nav-pills nav-stacked">
+                                                            <li class="active">
+                                    <a href="http://kahlan.github.io/docs/index.html">
+                                        Overview
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/getting-started.html">
+                                        Getting Started
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/dsl.html">
+                                        DSL
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/matchers.html">
+                                        Matchers
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/allow.html">
+                                        Method Stubbing & Monkey Patching
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/test-double.html">
+                                        Test Double
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/quit.html">
+                                        Quit
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/cli-options.html">
+                                        CLI Options
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/reporters.html">
+                                        Reporters
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/pro-tips.html">
+                                        Pro Tips
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/config-file.html">
+                                        Kahlan-config.php
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/integration.html">
+                                        Integration with popular frameworks
+                                    </a>
+                                </li>
+                                                    </ul>
+
+                    </nav>
+
+                
+                <section id="content" class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
+                    <h2 id="matchers">Matchers</h2>
+<p><strong>Note:</strong> Expectations can only be done inside <code>it</code> blocks.</p>
+<p>Kahlan has a lot of matchers that can help you in your testing journey. All matchers can be chained.</p>
+<pre><code class="language-php">it("can chain up a lots of matchers", function() {
+   expect([1, 2, 3])-&gt;toBeA('array')-&gt;toBe([1, 2, 3])-&gt;toContain(1);
+});</code></pre>
+<p><a name="classic-matchers"></a></p>
+<h3 id="classic-matchers">Classic matchers</h3>
+<p><strong>toBe($expected)</strong></p>
+<pre><code class="language-php">it("passes if $actual === $expected", function() {
+    expect(true)-&gt;toBe(true);
+});</code></pre>
+<p><strong>toEqual($expected)</strong></p>
+<pre><code class="language-php">it("passes if $actual == $expected", function() {
+    expect(true)-&gt;toEqual(1);
+});</code></pre>
+<p><strong>toBeTruthy()</strong></p>
+<pre><code class="language-php">it("passes if $actual is truthy", function() {
+    expect(1)-&gt;toBeTruthy();
+});</code></pre>
+<p><strong>toBeFalsy() / toBeEmpty()</strong></p>
+<pre><code class="language-php">it("passes if $actual is falsy", function() {
+    expect(0)-&gt;toBeFalsy();
+    expect(0)-&gt;toBeEmpty();
+});</code></pre>
+<p><strong>toBeNull()</strong></p>
+<pre><code class="language-php">it("passes if $actual is null", function() {
+    expect(null)-&gt;toBeNull();
+});</code></pre>
+<p><strong>toBeA($expected)</strong></p>
+<pre><code class="language-php">it("passes if $actual is of a specific type", function() {
+    expect('Hello World!')-&gt;toBeA('string');
+    expect(false)-&gt;toBeA('boolean');
+    expect(new stdClass())-&gt;toBeA('object');
+});</code></pre>
+<p><em>Supported types:</em></p>
+<ul>
+<li>string</li>
+<li>integer</li>
+<li>float (floating point numbers - also called double)</li>
+<li>boolean</li>
+<li>array</li>
+<li>object</li>
+<li>null</li>
+<li>resource</li>
+</ul>
+<p><strong>toBeAnInstanceOf($expected)</strong></p>
+<pre><code class="language-php">it("passes if $actual is an instance of stdObject", function() {
+    expect(new stdClass())-&gt;toBeAnInstanceOf('stdObject');
+});</code></pre>
+<p><strong>toHaveLength($expected)</strong></p>
+<pre><code class="language-php">it("passes if $actual has the correct length", function() {
+    expect('Hello World!')-&gt;toHaveLength(12);
+    expect(['a', 'b', 'c'])-&gt;toHaveLength(3);
+});</code></pre>
+<p><strong>toContain($expected)</strong></p>
+<pre><code class="language-php">it("passes if $actual contain $expected", function() {
+    expect([1, 2, 3])-&gt;toContain(3);
+});</code></pre>
+<p><strong>toContainKey($expected)</strong></p>
+<pre><code class="language-php">it("passes if $actual contain $expected key(s)", function() {
+    expect(['a' =&gt; 1, 'b' =&gt; 2, 'c' =&gt; 3])-&gt;toContainKey(a);
+    expect(['a' =&gt; 1, 'b' =&gt; 2, 'c' =&gt; 3])-&gt;toContainKey(a, b);
+    expect(['a' =&gt; 1, 'b' =&gt; 2, 'c' =&gt; 3])-&gt;toContainKey([a, b]);
+});</code></pre>
+<p><strong>toBeCloseTo($expected, $precision)</strong></p>
+<pre><code class="language-php">it("passes if abs($actual - $expected)*2 &lt; 0.01", function() {
+    expect(1.23)-&gt;toBeCloseTo(1.225, 2);
+    expect(1.23)-&gt;not-&gt;toBeCloseTo(1.2249999, 2);
+});</code></pre>
+<p><strong>toBeGreaterThan($expected)</strong></p>
+<pre><code class="language-php">it("passes if $actual &gt; $expected", function() {
+    expect(1)-&gt;toBeGreaterThan(0.999);
+});</code></pre>
+<p><strong>toBeLessThan($expected)</strong></p>
+<pre><code class="language-php">it("passes if $actual &lt; $expected", function() {
+    expect(0.999)-&gt;toBeLessThan(1);
+});</code></pre>
+<p><strong>toThrow($expected)</strong></p>
+<pre><code class="language-php">it("passes if $closure throws the $expected exception", function() {
+    $closure = function() {
+        // place the code that you expect to throw an exception in a closure, like so
+        throw new RuntimeException('exception message');
+    };
+
+    expect($closure)-&gt;toThrow();
+    expect($closure)-&gt;toThrow(new RuntimeException());
+    expect($closure)-&gt;toThrow(new RuntimeException('exception message'));
+});</code></pre>
+<p><strong>toMatch($expected)</strong></p>
+<pre><code class="language-php">it("passes if $actual matches the $expected regexp", function() {
+    expect('Hello World!')-&gt;toMatch('/^H(.*?)!$/');
+});</code></pre>
+<pre><code class="language-php">it("passes if $actual matches the $expected closure logic", function() {
+    expect('Hello World!')-&gt;toMatch(function($actual) {
+        return $actual === 'Hello World!';
+    });
+});</code></pre>
+<p><strong>toEcho($expected)</strong></p>
+<pre><code class="language-php">it("passes if $closure echoes the expected output", function() {
+    $closure = function() {
+        echo "Hello World!";
+    };
+
+    expect($closure)-&gt;toEcho("Hello World!");
+});</code></pre>
+<p><strong>toMatchEcho($expected)</strong></p>
+<pre><code class="language-php">it("passes if $closure echoes the expected regex output", function() {
+    $closure = function() {
+        echo "Hello World!";
+    };
+
+    expect($closure)-&gt;toMatchEcho('/^H(.*?)!$/');
+});</code></pre>
+<pre><code class="language-php">it("passes if $actual matches the $expected closure logic", function() {
+    expect('Hello World!')-&gt;toMatchEcho(function($actual) {
+        return $actual === 'Hello World!';
+    });
+});</code></pre>
+<h3><a name="method"></a>Method invocation matchers</h3>
+<p><strong>Note:</strong> You should <strong>always remember</strong> to use <code>toReceive</code> function <strong>before</strong> you call a method.</p>
+<p><strong>toReceive($expected)</strong></p>
+<pre><code class="language-php">it("expects $foo to receive message() with the correct param", function() {
+    $foo = new Foo();
+
+    expect($foo)-&gt;toReceive('message')-&gt;with('My Message');
+    expect($foo-&gt;message('My Message'))-&gt;toBe($foo);
+});</code></pre>
+<pre><code class="language-php">it("expects $foo to receive message() and bail out using a stub", function() {
+    $foo = new Foo();
+
+    expect($foo)-&gt;toReceive('message')-&gt;andReturn('something');
+    expect($foo-&gt;message('My Message'))-&gt;toBe('something');
+});</code></pre>
+<p><strong>Note:</strong> When <code>andReturn()/andRun()</code> is not applied, <code>toReceive()</code> simply act as a &quot;spy&quot; and let the code execution flow to be unchanged. However when applied, the code execution will bail out with the stub value.</p>
+<pre><code class="language-php">it("expects $foo to receive message() and bail out using a closure for stub", function() {
+    $foo = new Foo();
+
+    expect($foo)-&gt;toReceive('message')-&gt;andRun(function() {
+        return 'something';
+    });
+    expect($foo-&gt;message('My Message'))-&gt;toBe('something');
+});</code></pre>
+<pre><code class="language-php">it("expects Foo to receive ::message() with the correct param", function() {
+    expect(Foo::class)-&gt;toReceive('::message')-&gt;with('My Message');
+    Foo::message('My Message');
+});</code></pre>
+<pre><code class="language-php">it("expects Foo to receive ::message() with the correct param only once", function() {
+    expect(Foo::class)-&gt;toReceive('::message')-&gt;with('My Message')-&gt;once();
+    Foo::message('My Message');
+});</code></pre>
+<pre><code class="language-php">it("expects Foo to receive ::message() with the correct param a specified number of times", function() {
+    expect(Foo::class)-&gt;toReceive('::message')-&gt;with('My Message')-&gt;time(2);
+    $foo::message('My Message');
+    $foo::message('My Message');
+});</code></pre>
+<pre><code class="language-php">it("expects $foo to receive message() followed by foo()", function() {
+    $foo = new Foo();
+    expect($foo)-&gt;toReceive('message')-&gt;ordered;
+    expect($foo)-&gt;toReceive('foo')-&gt;ordered;
+    $foo-&gt;message();
+    $foo-&gt;foo();
+});</code></pre>
+<pre><code class="language-php">it("expects $foo to receive message() but not followed by foo()", function() {
+    $foo = new Foo();
+    expect($foo)-&gt;toReceive('message')-&gt;ordered;
+    expect($foo)-&gt;not-&gt;toReceive('foo')-&gt;ordered;
+    $foo-&gt;foo();
+    $foo-&gt;message();
+});</code></pre>
+<p><strong>Note:</strong> You should pay attention that using such matchers will make your tests more &quot;fragile&quot; and can be identified as code smells even though not all code smells indicate real problems.</p>
+<h3><a name="method"></a>Function invocation matchers</h3>
+<p><strong>Note:</strong> You should <strong>always remember</strong> to use <code>toBeCalled</code> function <strong>before</strong> you call a method.</p>
+<p><strong>toBeCalled()</strong></p>
+<pre><code class="language-php">it("expects `time()` to be called", function() {
+    $foo = new Foo();
+    expect('time')-&gt;toBeCalled();
+    $foo-&gt;date();
+});</code></pre>
+<p><strong>Note:</strong> When <code>andReturn()/andRun()</code> is not applied, <code>toBeCalled()</code> simply act as a &quot;spy&quot; and let the code execution flow to be unchanged. However when applied, the code execution will bail out with the stub value.</p>
+<pre><code class="language-php">it("expects `time()` to be called", function() {
+    $foo = new Foo();
+    expect('time')-&gt;toBeCalled()-&gt;andReturn(strtotime("now"));
+    $foo-&gt;date();
+});</code></pre>
+<pre><code class="language-php">it("expects `time()` to be called", function() {
+    $foo = new Foo();
+
+    expect('time')-&gt;toBeCalled()-&gt;andRun(function() {
+        return strtotime("now")
+    });
+
+    $foo-&gt;date();
+});</code></pre>
+<pre><code class="language-php">it("expects `time()` to be called with the correct param only once", function() {
+    $foo = new Foo();
+    expect('time')-&gt;toBeCalled()-&gt;with()-&gt;once();
+    $foo-&gt;date();
+});</code></pre>
+<pre><code class="language-php">it("expects `time()` to be called and followed by `rand()`", function() {
+    $foo = new Foo();
+    expect('time')-&gt;toBeCalled()-&gt;ordered;
+    expect('rand')-&gt;toBeCalled()-&gt;ordered;
+    $foo-&gt;date();
+    $foo-&gt;random();
+});</code></pre>
+<pre><code class="language-php">it("expects `time()` to be called and followed by `rand()`", function() {
+    $foo = new Foo();
+    expect('time')-&gt;toBeCalled()-&gt;ordered;
+    expect('rand')-&gt;toBeCalled()-&gt;ordered;
+    $foo-&gt;random();
+    $foo-&gt;date();
+});</code></pre>
+<h3><a name="argument"></a>Argument Matchers</h3>
+<p>To enable <strong>Argument Matching</strong> add the following <code>use</code> statement in the top of your tests:</p>
+<pre><code class="language-php">use Kahlan\Arg;</code></pre>
+<p>With the <code>Arg</code> class you can use any existing matchers to test arguments.</p>
+<pre><code class="language-php">it("expects args to match the argument matchers", function() {
+    $foo = new Foo();
+    expect($foo)-&gt;toReceive('message')-&gt;with(Arg::toBeA('boolean'))-&gt;ordered;
+    expect($foo)-&gt;toReceive('message')-&gt;with(Arg::toBeA('string'))-&gt;ordered;
+    $foo-&gt;message(true);
+    $foo-&gt;message('Hello World!');
+});</code></pre>
+<pre><code class="language-php">it("expects args match the toContain argument matcher", function() {
+    $foo = new Foo();
+    expect($foo)-&gt;toReceive('message')-&gt;with(Arg::toContain('My Message'));
+    $foo-&gt;message(['My Message', 'My Other Message']);
+});</code></pre>
+<h3><a name="custom"></a>Custom matchers</h3>
+<p>With Kahlan you can easily create you own matchers. Long story short, a matcher is a simple class with a least a two static methods: <code>match()</code> and <code>description()</code>.</p>
+<p>Example of a <code>toBeZero()</code> matcher:</p>
+<pre><code class="language-php">namespace my\namespace;
+
+class ToBeZero
+{
+    public static function match($actual, $expected = null)
+    {
+        return $actual === 0;
+    }
+
+    public static function description()
+    {
+        return "be equal to 0.";
+    }
+}</code></pre>
+<p>Once created you only need to <a href="config-file.html">register it</a> using the following syntax:</p>
+<pre><code class="language-php">Kahlan\Matcher::register('toBeZero', 'my\namespace\ToBeZero');</code></pre>
+<p><strong>Note:</strong> custom matcher should be reserved to frequently used matching. For other cases, just use the <code>toMatch</code> matcher using the matcher closure as parameter.</p>
+<p>It's also possible to register a matcher to work only for a specific class name to keep the API consistent.</p>
+<p>Example:</p>
+<pre><code class="language-php">Kahlan\Matcher::register('toContain', 'my\namespace\ToContain', ' SplObjectStorage');</code></pre>
+                </section>
+
+            </div>
+        </main>
+
+        <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+        <script src="//yastatic.net/highlightjs/8.2/highlight.min.js"></script>
+
+        <script>
+            $(function() {
+                $("section>h1").wrap('<div class="page-header" />');
+                // Syntax highlighting
+                hljs.initHighlightingOnLoad();
+            });
+        </script>
+
+    </body>
+</html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Kahlan</title>
+
+        <link rel="stylesheet" href="http://kahlan.github.io/docs/css/bootstrap.min.css">
+        <link rel="stylesheet" href="http://kahlan.github.io/docs/css/font-awesome.min.css">
+        <link rel="stylesheet" href="http://kahlan.github.io/docs/css/highlight.dark.css">
+        <link rel="stylesheet" href="http://kahlan.github.io/docs/css/main.css">
+    </head>
+    <body>
+
+                    <a href="https://github.com/kahlan/kahlan" style="position: fixed; top: 0; right: 0; border: 0; z-index:1">
+                <img src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png">
+            </a>
+        
+        <main class="container-fluid">
+            <div class="row">
+
+                
+                    <nav id="sidebar" class="col-sm-3 col-lg-2" role="navigation">
+
+                        <ul class="nav nav-pills nav-stacked">
+                                                            <li class="active">
+                                    <a href="http://kahlan.github.io/docs/index.html">
+                                        Overview
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/getting-started.html">
+                                        Getting Started
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/dsl.html">
+                                        DSL
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/matchers.html">
+                                        Matchers
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/allow.html">
+                                        Method Stubbing & Monkey Patching
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/test-double.html">
+                                        Test Double
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/quit.html">
+                                        Quit
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/cli-options.html">
+                                        CLI Options
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/reporters.html">
+                                        Reporters
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/pro-tips.html">
+                                        Pro Tips
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/config-file.html">
+                                        Kahlan-config.php
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/integration.html">
+                                        Integration with popular frameworks
+                                    </a>
+                                </li>
+                                                    </ul>
+
+                    </nav>
+
+                
+                <section id="content" class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
+                    <h2 id="the">The <code>kahlan-config.php</code> file</h2>
+<p>If you want to set some default options, change the execution workflow or load some custom plugins at a bootstrap level, you will need to setup you own config file.</p>
+<p>Kahlan attempts to load the <code>kahlan-config.php</code> file from the current directory as the default config file. However you can define your own path using the <code>--config=myconfigfile.php</code> option in the command line. Custom <code>--config</code> can be useful if you want to use some specific configuration for Travis or something else.</p>
+<p>Example of a config file:</p>
+<pre><code class="language-php">&lt;?php
+use Kahlan\Filter\Filter;
+use Kahlan\Reporter\Coverage\Exporter\Coveralls;
+
+// It overrides some default option values.
+// Note that the values passed in command line will overwrite the ones below.
+$commandLine = $this-&gt;commandLine();
+$commandLine-&gt;argument('ff', 'default', 1);
+$commandLine-&gt;argument('coverage', 'default', 3);
+$commandLine-&gt;argument('coverage-scrutinizer', 'default', 'scrutinizer.xml');
+$commandLine-&gt;argument('coverage-coveralls', 'default', 'coveralls.json');
+
+// The logic to include into the workflow.
+Filter::register('kahlan.coveralls', function($chain) {
+
+    // Get the reporter called `'coverage'` from the list of reporters
+    $coverage = $this-&gt;reporters()-&gt;get('coverage');
+
+    // Abort if no coverage is available.
+    if (!$coverage || !$this-&gt;commandLine()-&gt;exists('coverage-coveralls')) {
+        return $chain-&gt;next();
+    }
+
+    // Use the `Coveralls` class to write the JSON coverage into a file
+    Coveralls::write([
+        'coverage' =&gt; $coverage,
+        'file' =&gt; $this-&gt;commandLine()-&gt;get('coverage-coveralls'),
+        'service_name' =&gt; 'travis-ci',
+        'service_job_id' =&gt; getenv('TRAVIS_JOB_ID') ?: null
+    ]);
+
+    // Continue the chain
+    return $chain-&gt;next();
+});
+
+// Apply the logic to the `'reporting'` entry point.
+Filter::apply($this, 'reporting', 'kahlan.coveralls');
+?&gt;</code></pre>
+<p>Above <code>'kahlan.coveralls'</code> is just a custom name and could be whatever as long as <code>Filter::register()</code> and <code>Filter::apply()</code> are named consistently.</p>
+<p><code>$this</code> refer to the Kahlan instance so <code>$this-&gt;reporters()-&gt;get('coverage')</code> will give you the instance of the coverage reporter. This coverage reporter will contain all raw data which is passed to the <code>Coveralls</code> exporter to be formatter.</p>
+<p>The filterable entry points are the following:</p>
+<ul>
+<li><code>'workflow</code>'           # The one to rule them all
+<ul>
+<li><code>'interceptor</code>'      # Operations on the autoloader</li>
+<li><code>'namespaces</code>'       # Adds some namespaces not managed by composer (like <code>spec</code>)</li>
+<li><code>'patchers</code>'         # Adds patchers</li>
+<li><code>'loadSpecs</code>'        # Loads specs</li>
+<li><code>'reporters</code>'        # Adds reporters</li>
+<li><code>'console'</code>        # Creates the console reporter</li>
+<li><code>'coverage'</code>       # Creates the coverage reporter</li>
+<li><code>'matchers</code>'         # Useful for registering some further matchers</li>
+<li><code>'run</code>'              # Runs the test suite</li>
+<li><code>'reporting</code>'        # Runs some additional reporting tasks</li>
+<li><code>'stop</code>'             # Trigger the stop event to reporters</li>
+<li><code>'quit</code>'             # For some additional post processing before quitting</li>
+</ul></li>
+</ul>
+<p><a href="https://github.com/kahlan/kahlan/blob/master/src/Cli/Kahlan.php">You can see more details about how the workflow works here</a> (start reading with the <code>run()</code> method).</p>
+<h3 id="optimizations">Optimizations</h3>
+<p>Kahlan acts like a wrapper. It intercepts loaded classes Just It Time (i.e. during the autoloading step) and rewrites the source code on the fly to make it easily testable with PHP. That's why Monkey Patching or redefining a class's method can be done inside the testing environment without any PECL extensions like runkit, aop, etc.</p>
+<p>Notice that this approach will make your code run a bit slower. However you can optimize Kahlan's interceptor to only patch the namespaces you want.</p>
+<p>For example, the following configuration will only limit the patching to a set of namespaces/classes:</p>
+<pre><code class="language-php">$this-&gt;commandLine()-&gt;set('include', [
+    'myapp',
+    'lithium',
+    'li3_zendserver\data\Job',
+    'AuthorizeNetCIM'
+]);</code></pre>
+<p>Conversely you can exclude some external dependencies to improve performance if you don't intend to Monkey Patch/Stub some namespaces/classes:</p>
+<pre><code class="language-php">$this-&gt;commandLine()-&gt;set('exclude', [
+    'Symfony',
+    'Doctrine'
+]);</code></pre>
+<p>Finally, you can disable all the patching if you prefer to deal with DI only and are not interested by Kahlan's features:</p>
+<pre><code class="language-php">$this-&gt;commandLine()-&gt;set('include', []);</code></pre>
+<p><strong>Note:</strong> You will still able to stub instances and classes created with <code>Double::instance()</code>/<code>Double::classname()</code>.</p>
+                </section>
+
+            </div>
+        </main>
+
+        <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+        <script src="//yastatic.net/highlightjs/8.2/highlight.min.js"></script>
+
+        <script>
+            $(function() {
+                $("section>h1").wrap('<div class="page-header" />');
+                // Syntax highlighting
+                hljs.initHighlightingOnLoad();
+            });
+        </script>
+
+    </body>
+</html>

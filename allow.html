@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Kahlan</title>
+
+        <link rel="stylesheet" href="http://kahlan.github.io/docs/css/bootstrap.min.css">
+        <link rel="stylesheet" href="http://kahlan.github.io/docs/css/font-awesome.min.css">
+        <link rel="stylesheet" href="http://kahlan.github.io/docs/css/highlight.dark.css">
+        <link rel="stylesheet" href="http://kahlan.github.io/docs/css/main.css">
+    </head>
+    <body>
+
+                    <a href="https://github.com/kahlan/kahlan" style="position: fixed; top: 0; right: 0; border: 0; z-index:1">
+                <img src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png">
+            </a>
+        
+        <main class="container-fluid">
+            <div class="row">
+
+                
+                    <nav id="sidebar" class="col-sm-3 col-lg-2" role="navigation">
+
+                        <ul class="nav nav-pills nav-stacked">
+                                                            <li class="active">
+                                    <a href="http://kahlan.github.io/docs/index.html">
+                                        Overview
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/getting-started.html">
+                                        Getting Started
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/dsl.html">
+                                        DSL
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/matchers.html">
+                                        Matchers
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/allow.html">
+                                        Method Stubbing & Monkey Patching
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/test-double.html">
+                                        Test Double
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/quit.html">
+                                        Quit
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/cli-options.html">
+                                        CLI Options
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/reporters.html">
+                                        Reporters
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/pro-tips.html">
+                                        Pro Tips
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/config-file.html">
+                                        Kahlan-config.php
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://kahlan.github.io/docs/integration.html">
+                                        Integration with popular frameworks
+                                    </a>
+                                </li>
+                                                    </ul>
+
+                    </nav>
+
+                
+                <section id="content" class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
+                    <h2 id="stubs-amp-monkey-patching-dsl">Stubs &amp; Monkey Patching DSL</h2>
+<p>A method stub or simply stub in software development is used to stand in for some other programming functionality. This section explains how to perform such replacement with Kahlan.</p>
+<h3 id="method-stubbing">Method Stubbing</h3>
+<p>Use <code>allow()</code> to stub an existing method on any class like so:</p>
+<pre><code class="language-php">it("stubs a method by setting a return value", function() {
+    $instance = new MyClass();
+    allow($instance)-&gt;toReceive('myMethod')-&gt;andReturn('Good Morning World!');
+
+    expect($instance-&gt;myMethod())-&gt;toBe('Good Morning World!');
+});</code></pre>
+<pre><code class="language-php">it("stubs a method by setting a return value only when some arguments matches", function() {
+    $instance = new MyClass();
+    allow($instance)-&gt;toReceive('myMethod')-&gt;with('Hello!')-&gt;andReturn('Good Morning World!');
+
+    expect($instance-&gt;myMethod('Hello!'))-&gt;toBe('Good Morning World!');
+    expect($instance-&gt;myMethod())-&gt;toBe(null);
+});</code></pre>
+<p>You can specify multiple return values with:</p>
+<pre><code class="language-php">it("stubs a method with multiple return values", function() {
+    $instance = new MyClass();
+    allow($instance)-&gt;toReceive('sequential')-&gt;andReturn(1, 3, 2);
+
+    expect($instance-&gt;sequential())-&gt;toBe(1);
+    expect($instance-&gt;sequential())-&gt;toBe(3);
+    expect($instance-&gt;sequential())-&gt;toBe(2);
+});</code></pre>
+<p>You can also stub <code>static</code> methods using <code>::</code>:</p>
+<pre><code class="language-php">it("stubs a static method", function() {
+    $instance = new MyClass();
+    allow($instance)-&gt;toReceive('::myMethod')-&gt;andReturn('Good Morning World!');
+
+    expect($instance::myMethod())-&gt;toBe('Good Morning World!');
+});</code></pre>
+<p>It's also possible to use a closure to replace the whole method logic:</p>
+<pre><code class="language-php">it("stubs a method using a closure", function() {
+    allow($foo)-&gt;toReceive('myMethod')-&gt;andRun(function($param) { return $param; });
+    expect($instance-&gt;myMethod('Hello World!'))-&gt;toBe('Hello World!');
+});</code></pre>
+<p>Moreover you can stub a chain of methods by using the following syntax.</p>
+<pre><code class="language-php">it('should patch PDO', function() {
+    allow('PDO')-&gt;toReceive('prepare', 'fetchAll')-&gt;andReturn([['name' =&gt; 'bob']]);
+
+    $user = new User();
+    expect($user-&gt;all())-&gt;toBe([
+        ['name' =&gt; 'bob']
+    ]);
+});</code></pre>
+<p>Where the <code>User</code> class is:</p>
+<pre><code class="language-php">&lt;?php
+use PDO;
+
+class User
+{
+    protected $_db = null;
+
+    public function __construct()
+    {
+        $this-&gt;_db = new PDO('mysql:dbname=testdb;host=localhost', 'root','');
+    }
+
+    public function all()
+    {
+        $stmt = $this-&gt;db-&gt;prepare('SELECT * FROM users');
+        $stmt-&gt;execute();
+        return $stmt-&gt;fetchAll();
+    }
+}</code></pre>
+<p>In practice method chaining is considered as code smells because it tends to violate the Law of Demeter. So use it wisely.</p>
+<p>Finally, <code>where()</code> can be used to specify some arguments requirement for a chain of methods:</p>
+<pre><code class="language-php">it('returns the stubbed return value when arguments requirement match', function() {
+    $query = new MyQuery();
+    allow($query)
+      -&gt;toReceive('find', 'where', 'order', 'limit')
+      -&gt;where([
+        'find'  =&gt; ['widgets']],
+        'where' =&gt; [['name' =&gt; 'Bottle Opener']],
+        'order' =&gt; [['id' =&gt; 'desc']],
+        'limit' =&gt; [10]
+      ])
+      -&gt;andReturn([[id =&gt; '123','name' =&gt; 'Bottle Opener']]);
+
+    expect($query-&gt;find('widgets')
+        -&gt;where(['name' =&gt; 'Bottle Opener'])
+        -&gt;order(['id' =&gt; 'desc'])
+        -&gt;limit(10))-&gt;toBe([[id =&gt; '123','name' =&gt; 'Bottle Opener']]);
+});</code></pre>
+<h3><a name="function-stubbing"></a>Function Stubbing</h3>
+<p>Use <code>allow()</code> to stub almost all functions like so:</p>
+<pre><code class="language-php">it("shows some examples of function stubbing", function() {
+    allow('time')-&gt;toBeCalled()-&gt;andReturn(123);
+    allow('time')-&gt;toBeCalled()-&gt;andReturn(123, 456, 789);
+    allow('time')-&gt;toBeCalled()-&gt;andRun(function() { return 123; });
+
+    allow('rand')-&gt;toBeCalled()-&gt;with(0, 10)-&gt;andReturn(5);
+});</code></pre>
+<h3><a name="monkey-patching"></a>Monkey Patching</h3>
+<p>Use <code>allow()</code> to monkey patch classes like so:</p>
+<pre><code class="language-php">it("shows some examples of function stubbing", function() {
+    // Monkey patch `PDO` and stub chained methods under the hood.
+    allow('PDO')-&gt;toReceive('prepare-&gt;fetchAll')-&gt;andReturn([['name' =&gt; 'bob']]);
+    allow('PDO')-&gt;toReceive('prepare-&gt;fetchAll')-&gt;andRun(function() {
+        return [['name' =&gt; 'bob']];
+    });
+
+    // Monkey patch `PDO` with a specific class.
+    allow('PDO')-&gt;toBe('My\Alternative\PDO');
+
+    // Monkey patch `DateTime` with a specific instance.
+    allow('DateTime')-&gt;toBe(new DateTime('@123'));
+
+    // Monkey patch `PDO` with a generic stub instance.
+    allow('PDO')-&gt;toBeOK();
+});</code></pre>
+                </section>
+
+            </div>
+        </main>
+
+        <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+        <script src="//yastatic.net/highlightjs/8.2/highlight.min.js"></script>
+
+        <script>
+            $(function() {
+                $("section>h1").wrap('<div class="page-header" />');
+                // Syntax highlighting
+                hljs.initHighlightingOnLoad();
+            });
+        </script>
+
+    </body>
+</html>
