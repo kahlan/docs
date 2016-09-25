@@ -362,10 +362,18 @@ it("expects args to match the argument matchers", function() {
 ```
 
 ```php
-it("expects args match the toContain argument matcher", function() {
+it("expects args to match the toContain argument matcher", function() {
     $foo = new Foo();
     expect($foo)->toReceive('message')->with(Arg::toContain('My Message'));
     $foo->message(['My Message', 'My Other Message']);
+});
+```
+
+```php
+it("expects multiple args to match the argument matcher", function() {
+    $foo = new Foo();
+    expect($foo)->toReceive('message')->with(Arg::toBe('Hello World!'), Arg::toBeA('boolean'));
+    $foo->message('Hello World!', true);
 });
 ```
 
