@@ -102,9 +102,9 @@ it("passes if $actual contain $expected", function() {
 
 ```php
 it("passes if $actual contain $expected key(s)", function() {
-    expect(['a' => 1, 'b' => 2, 'c' => 3])->toContainKey(a);
-    expect(['a' => 1, 'b' => 2, 'c' => 3])->toContainKey(a, b);
-    expect(['a' => 1, 'b' => 2, 'c' => 3])->toContainKey([a, b]);
+    expect(['a' => 1, 'b' => 2, 'c' => 3])->toContainKey('a');
+    expect(['a' => 1, 'b' => 2, 'c' => 3])->toContainKey('a', 'b');
+    expect(['a' => 1, 'b' => 2, 'c' => 3])->toContainKey(['a', 'b']);
 });
 ```
 
