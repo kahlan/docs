@@ -94,6 +94,10 @@ Filter::apply($this, 'patchers', 'api.patchers');
 
 **Note:** You will probably need to remove all cached files using `kahlan --cc`.
 
+### CodeIgniter
+
+For testing CodeIgniter application, you can read [Abdul Malik Ikhsan's blog post](https://samsonasik.wordpress.com/2016/10/19/testing-codeigniter-application-with-kahlan-3-0/) about it.
+
 ### Working with a custom autoloader not compatible with PSR-0.
 
 In this case your must implement a `PSR-0` **Composer** compatible autoloader. To have a right direction you could see at [sources](https://github.com/composer/composer/blob/master/src/Composer/Autoload/ClassLoader.php), and take care of `findFile`, `loadClass` and `add` functions.
