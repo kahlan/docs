@@ -14,10 +14,10 @@ use Kahlan\Reporter\Coverage\Exporter\Coveralls;
 // It overrides some default option values.
 // Note that the values passed in command line will overwrite the ones below.
 $commandLine = $this->commandLine();
-$commandLine->argument('ff', 'default', 1);
-$commandLine->argument('coverage', 'default', 3);
-$commandLine->argument('coverage-scrutinizer', 'default', 'scrutinizer.xml');
-$commandLine->argument('coverage-coveralls', 'default', 'coveralls.json');
+$commandLine->option('ff', 'default', 1);
+$commandLine->option('coverage', 'default', 3);
+$commandLine->option('coverage-scrutinizer', 'default', 'scrutinizer.xml');
+$commandLine->option('coverage-coveralls', 'default', 'coveralls.json');
 
 // The logic to include into the workflow.
 Filter::register('kahlan.coveralls', function($chain) {
