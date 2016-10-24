@@ -17,13 +17,14 @@ composer require --dev kahlan/kahlan
 
 Alternatively, you may manually add `"kahlan/kahlan": "~3.0"` to the `require-dev` dependencies within your `composer.json`.
 
+The Kahlan package is installed with a vendor library accessible through `vendor/bin/kahlan` by default. However, you can configure its location like all other composer vendor binaries.
 
 <a name="running-kahlan"></a>
 ## Running Kahlan
 Once Kahlan is installed, you can run your tests (referred to as *specs*) with:
 
 ```bash
-./bin/kahlan
+./vendor/bin/kahlan
 ```
 
 For a full list of the options, see the [CLI Options](cli-options.md).
