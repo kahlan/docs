@@ -11,7 +11,6 @@
 The recommended way to install Kahlan is with [Composer](http://getcomposer.org/) as a *development* dependency of your project.
 
 ```bash
-composer config bin-dir bin
 composer require --dev kahlan/kahlan
 ```
 
