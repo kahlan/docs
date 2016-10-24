@@ -8,7 +8,6 @@
 
 <a name="installation"></a>
 ### Installation
-
 The recommended way to install Kahlan is with [Composer](http://getcomposer.org/) as a *development* dependency of your project.
 
 ```bash
@@ -19,6 +18,7 @@ composer require --dev kahlan/kahlan
 Alternatively, you may manually add `"kahlan/kahlan": "~3.0"` to the `require-dev` dependencies within your `composer.json`.
 
 <a name="running-kahlan"></a>
+
 ## Running Kahlan
 Once Kahlan is installed, you can run your tests (referred to as *specs*) with:
 
