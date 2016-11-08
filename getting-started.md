@@ -47,3 +47,5 @@ An example directory structure would be:
 ├── composer.json
 └── README.md
 ```
+
+For basic, you can clone [https://github.com/sitrunlab/learn-kahlan](https://github.com/sitrunlab/learn-kahlan) to get started.
