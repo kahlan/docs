@@ -75,7 +75,7 @@ So for our example above, the `Layer` patcher can be configured like the followi
 ```php
 use Kahlan\Filter\Filter;
 use Kahlan\Jit\Interceptor;
-use Kahlan\Plugin\Layer;
+use Kahlan\Jit\Patcher\Layer;
 
 Filter::register('api.patchers', function($chain) {
     $interceptor = Interceptor::instance();
@@ -112,7 +112,7 @@ Filter::register('custom.autoloader', function($chain) {
     $this->autoloader()->addClassMap(
         ClassMapGenerator::createMap(APPPATH . 'models')
     );
-    
+
     return $chain->next();
 });
 Filter::apply($this, 'namespaces', 'custom.autoloader');
