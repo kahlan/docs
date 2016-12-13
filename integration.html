@@ -24,7 +24,7 @@
                     <nav id="sidebar" class="col-sm-3 col-lg-2" role="navigation">
 
                         <ul class="nav nav-pills nav-stacked">
-                                                            <li class="active">
+                                                            <li class="">
                                     <a href="https://kahlan.github.io/docs/index.html">
                                         Overview
                                     </a>
@@ -46,7 +46,7 @@
                                 </li>
                                                             <li class="">
                                     <a href="https://kahlan.github.io/docs/allow.html">
-                                        Method Stubbing & Monkey Patching
+                                        Stubs & Monkey Patching DSL
                                     </a>
                                 </li>
                                                             <li class="">
@@ -79,7 +79,7 @@
                                         Kahlan-config.php
                                     </a>
                                 </li>
-                                                            <li class="">
+                                                            <li class="active">
                                     <a href="https://kahlan.github.io/docs/integration.html">
                                         Integration with popular frameworks
                                     </a>
@@ -142,7 +142,7 @@ describe("MyModel", function() {
 <p>So for our example above, the <code>Layer</code> patcher can be configured like the following in <a href="config-file.html">your <code>kahlan-config.php</code> file</a>:</p>
 <pre><code class="language-php">use Kahlan\Filter\Filter;
 use Kahlan\Jit\Interceptor;
-use Kahlan\Plugin\Layer;
+use Kahlan\Jit\Patcher\Layer;
 
 Filter::register('api.patchers', function($chain) {
     $interceptor = Interceptor::instance();
@@ -159,7 +159,24 @@ Filter::register('api.patchers', function($chain) {
 Filter::apply($this, 'patchers', 'api.patchers');</code></pre>
 <p><strong>Note:</strong> You will probably need to remove all cached files using <code>kahlan --cc</code>.</p>
 <h3 id="working-with-a-custom-autoloader-not-compatible-with-psr-0">Working with a custom autoloader not compatible with PSR-0.</h3>
-<p>In this case your must implement a <code>PSR-0</code> <strong>Composer</strong> compatible autoloader. To have a right direction you could see at <a href="https://github.com/composer/composer/blob/master/src/Composer/Autoload/ClassLoader.php">sources</a>, and take care of <code>findFile</code>, <code>loadClass</code> and <code>add</code> functions.</p>
+<p>If you need to load non PSR-0 compatible classes simply add &quot;composer/composer&quot;: &quot;^1.2&quot; in your require-dev section and use Composer\Autoload\ClassMapGenerator; in your kahlan config file to generate a class map. For example, when you need to use it in <a href="https://codeigniter.com/">CodeIgniter &lt;=3.1.2</a>, you can do the following:</p>
+<pre><code class="language-php">use Kahlan\Filter\Filter;
+use Composer\Autoload\ClassMapGenerator;
+
+Filter::register('custom.autoloader', function($chain) {
+    $this-&gt;autoloader()-&gt;addClassMap(
+        ClassMapGenerator::createMap(BASEPATH . 'core')
+    );
+    $this-&gt;autoloader()-&gt;addClassMap(
+        ClassMapGenerator::createMap(APPPATH . 'controllers')
+    );
+    $this-&gt;autoloader()-&gt;addClassMap(
+        ClassMapGenerator::createMap(APPPATH . 'models')
+    );
+
+    return $chain-&gt;next();
+});
+Filter::apply($this, 'namespaces', 'custom.autoloader');</code></pre>
                 </section>
 
             </div>

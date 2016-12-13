@@ -24,7 +24,7 @@
                     <nav id="sidebar" class="col-sm-3 col-lg-2" role="navigation">
 
                         <ul class="nav nav-pills nav-stacked">
-                                                            <li class="active">
+                                                            <li class="">
                                     <a href="https://kahlan.github.io/docs/index.html">
                                         Overview
                                     </a>
@@ -46,7 +46,7 @@
                                 </li>
                                                             <li class="">
                                     <a href="https://kahlan.github.io/docs/allow.html">
-                                        Method Stubbing & Monkey Patching
+                                        Stubs & Monkey Patching DSL
                                     </a>
                                 </li>
                                                             <li class="">
@@ -74,7 +74,7 @@
                                         Pro Tips
                                     </a>
                                 </li>
-                                                            <li class="">
+                                                            <li class="active">
                                     <a href="https://kahlan.github.io/docs/config-file.html">
                                         Kahlan-config.php
                                     </a>
@@ -101,10 +101,10 @@ use Kahlan\Reporter\Coverage\Exporter\Coveralls;
 // It overrides some default option values.
 // Note that the values passed in command line will overwrite the ones below.
 $commandLine = $this-&gt;commandLine();
-$commandLine-&gt;argument('ff', 'default', 1);
-$commandLine-&gt;argument('coverage', 'default', 3);
-$commandLine-&gt;argument('coverage-scrutinizer', 'default', 'scrutinizer.xml');
-$commandLine-&gt;argument('coverage-coveralls', 'default', 'coveralls.json');
+$commandLine-&gt;option('ff', 'default', 1);
+$commandLine-&gt;option('coverage', 'default', 3);
+$commandLine-&gt;option('coverage-scrutinizer', 'default', 'scrutinizer.xml');
+$commandLine-&gt;option('coverage-coveralls', 'default', 'coveralls.json');
 
 // The logic to include into the workflow.
 Filter::register('kahlan.coveralls', function($chain) {

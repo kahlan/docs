@@ -24,7 +24,7 @@
                     <nav id="sidebar" class="col-sm-3 col-lg-2" role="navigation">
 
                         <ul class="nav nav-pills nav-stacked">
-                                                            <li class="active">
+                                                            <li class="">
                                     <a href="https://kahlan.github.io/docs/index.html">
                                         Overview
                                     </a>
@@ -39,14 +39,14 @@
                                         DSL
                                     </a>
                                 </li>
-                                                            <li class="">
+                                                            <li class="active">
                                     <a href="https://kahlan.github.io/docs/matchers.html">
                                         Matchers
                                     </a>
                                 </li>
                                                             <li class="">
                                     <a href="https://kahlan.github.io/docs/allow.html">
-                                        Method Stubbing & Monkey Patching
+                                        Stubs & Monkey Patching DSL
                                     </a>
                                 </li>
                                                             <li class="">
@@ -151,9 +151,9 @@
 });</code></pre>
 <p><strong>toContainKey($expected)</strong></p>
 <pre><code class="language-php">it("passes if $actual contain $expected key(s)", function() {
-    expect(['a' =&gt; 1, 'b' =&gt; 2, 'c' =&gt; 3])-&gt;toContainKey(a);
-    expect(['a' =&gt; 1, 'b' =&gt; 2, 'c' =&gt; 3])-&gt;toContainKey(a, b);
-    expect(['a' =&gt; 1, 'b' =&gt; 2, 'c' =&gt; 3])-&gt;toContainKey([a, b]);
+    expect(['a' =&gt; 1, 'b' =&gt; 2, 'c' =&gt; 3])-&gt;toContainKey('a');
+    expect(['a' =&gt; 1, 'b' =&gt; 2, 'c' =&gt; 3])-&gt;toContainKey('a', 'b');
+    expect(['a' =&gt; 1, 'b' =&gt; 2, 'c' =&gt; 3])-&gt;toContainKey(['a', 'b']);
 });</code></pre>
 <p><strong>toBeCloseTo($expected, $precision)</strong></p>
 <pre><code class="language-php">it("passes if abs($actual - $expected)*2 &lt; 0.01", function() {
@@ -242,7 +242,7 @@
     Foo::message('My Message');
 });</code></pre>
 <pre><code class="language-php">it("expects Foo to receive ::message() with the correct param a specified number of times", function() {
-    expect(Foo::class)-&gt;toReceive('::message')-&gt;with('My Message')-&gt;time(2);
+    expect(Foo::class)-&gt;toReceive('::message')-&gt;with('My Message')-&gt;times(2);
     $foo::message('My Message');
     $foo::message('My Message');
 });</code></pre>
@@ -314,10 +314,15 @@
     $foo-&gt;message(true);
     $foo-&gt;message('Hello World!');
 });</code></pre>
-<pre><code class="language-php">it("expects args match the toContain argument matcher", function() {
+<pre><code class="language-php">it("expects args to match the toContain argument matcher", function() {
     $foo = new Foo();
     expect($foo)-&gt;toReceive('message')-&gt;with(Arg::toContain('My Message'));
     $foo-&gt;message(['My Message', 'My Other Message']);
+});</code></pre>
+<pre><code class="language-php">it("expects multiple args to match the argument matcher", function() {
+    $foo = new Foo();
+    expect($foo)-&gt;toReceive('message')-&gt;with(Arg::toBe('Hello World!'), Arg::toBeA('boolean'));
+    $foo-&gt;message('Hello World!', true);
 });</code></pre>
 <h3><a name="custom"></a>Custom matchers</h3>
 <p>With Kahlan you can easily create you own matchers. Long story short, a matcher is a simple class with a least a two static methods: <code>match()</code> and <code>description()</code>.</p>
