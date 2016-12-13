@@ -1,3 +1,7 @@
+---
+currentMenu: quit
+---
+
 ## Quit Statement Patching
 
 When a unit test exercises code that contains an `exit()` or a `die()` statement, the execution of the whole test suite is aborted. With Kahlan, you can make all quit statements (i.e. `exit()` or `die()`) throw a `QuitException` instead.

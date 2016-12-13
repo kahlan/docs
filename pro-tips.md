@@ -1,3 +1,7 @@
+---
+currentMenu: pro-tips
+---
+
 ## Pro Tips
 
 ### Use the `--ff` option (fast fail)

@@ -1,3 +1,7 @@
+---
+currentMenu: integration
+---
+
 ## Integration with popular frameworks
 
 Kahlan relies on the Composer autoloader. As such, it is compatible with most frameworks. However a couple popular frameworks use their own autoloader, so you will need to add your namespaces to be autoloaded correctly in the test environment.

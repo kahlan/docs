@@ -1,3 +1,7 @@
+---
+currentMenu: getting-started
+---
+
 ## Getting Started
 
 <a name="requirements"></a>

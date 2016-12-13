@@ -1,3 +1,7 @@
+---
+currentMenu: allow
+---
+
 ## Stubs & Monkey Patching DSL
 
 A method stub or simply stub in software development is used to stand in for some other programming functionality. This section explains how to perform such replacement with Kahlan.

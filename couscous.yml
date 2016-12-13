@@ -25,7 +25,7 @@ menu:
             text: Matchers
             relativeUrl: matchers.html
         allow:
-            text: Method Stubbing & Monkey Patching
+            text: Stubs & Monkey Patching DSL
             relativeUrl: allow.html
         test-double:
             text: Test Double

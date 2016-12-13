@@ -1,3 +1,7 @@
+---
+currentMenu: matchers
+---
+
 ## Matchers
 
 **Note:** Expectations can only be done inside `it` blocks.

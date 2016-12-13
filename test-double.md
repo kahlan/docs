@@ -1,3 +1,7 @@
+---
+currentMenu: test-double
+---
+
 ## Test Double
 
 First add the following `use` statement in the top of your specs to be able to create test doubles:
@@ -109,7 +113,7 @@ So `allow()` on stubs can be applied on any method name. Under the hood `__call(
 ```php
 it("adds a custom endpoint", function() {
     $double = Double::instance(['methods' => ['myMethod']]);
-    
+
     expect(method_exists($double, 'myMethod'))->toBe(true);
 });
 ```

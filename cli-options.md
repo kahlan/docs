@@ -1,3 +1,7 @@
+---
+currentMenu: cli-options
+---
+
 ## CLI Options
 
 Below are all of Kahlan's option obtained through the `kahlan --help` command line.
