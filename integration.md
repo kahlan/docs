@@ -32,7 +32,7 @@ To import all Laravel "test facilities" into Kahlan you can make use of [this de
 
 ### Symfony
 
-To use Kahlan in a Symfony 2.8+ environment, you can use [elephantly/kahlan-bundle](https://packagist.org/packages/elephantly/kahlan-bundle) ([GitHub link](https://github.com/elephantly/kahlan-bundle)).
+To use Kahlan in a Symfony 2.7+ environment, you can use [elephantly/kahlan-bundle](https://packagist.org/packages/elephantly/kahlan-bundle) ([GitHub link](https://github.com/elephantly/kahlan-bundle)).
 Symfony ServiceContainer is then available in your spec files and you just have to launch `php app/console kahlan:run` with usual options.
 
 ### Phalcon
