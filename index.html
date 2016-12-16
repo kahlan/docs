@@ -90,74 +90,14 @@
 
                 
                 <section id="content" class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
-                    <div class="logo">
-  <img src="img/logo.png" title="Kahlan"></div>
-<blockquote>
-<p>The PHP Test Framework for Freedom, Truth, and Justice</p>
-</blockquote>
-<p>Kahlan is a full-featured Unit &amp; BDD test framework a la RSpec/JSpec which uses a <code>describe-it</code> syntax and moves testing in PHP one step forward.</p>
-<p><strong>Kahlan allows to stub or monkey patch your code directly like in Ruby or JavaScript without any required PECL-extentions.</strong></p>
-<p><a name="features"></a></p>
-<h3 id="features">Features</h3>
-<ul>
-<li><code>describe-it</code> syntax similar to modern BDD testing frameworks</li>
-<li>Code Coverage metrics (<a href="http://xdebug.org">xdebug</a> or <a href="http://phpdbg.com/docs">phpdbg</a> required)</li>
-<li>Handy stubbing system (<a href="https://github.com/padraic/mockery">mockery</a> or <a href="https://github.com/phpspec/prophecy">prophecy</a> are no longer needed)</li>
-<li>Set stubs on your class methods directly (i.e allows dynamic mocking)</li>
-<li>Ability to Monkey Patch your code (i.e. allows replacement of core functions/classes on the fly)</li>
-<li>Check called methods on your classes/instances</li>
-<li>Built-in Reporters (Terminal or HTML reporting through <a href="https://gotwarlost.github.io/istanbul/">istanbul</a> or <a href="http://ltp.sourceforge.net/coverage/lcov.php">lcov</a>)</li>
-<li>Built-in Exporters (Coveralls, Code Climate, Scrutinizer, Clover)</li>
-<li>Extensible, customizable workflow</li>
-</ul>
-<p><a name="license"></a></p>
-<h2 id="license">License</h2>
-<p>Licensed using the <a href="http://opensource.org/licenses/MIT">MIT license</a>.</p>
-<blockquote>
-<p>The MIT License (MIT)</p>
-<p>Copyright (c) 2014 CrysaLEAD</p>
-<p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the &quot;Software&quot;), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
-<p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
-<p>THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
-</blockquote>
-<p><a name="contributing"></a></p>
-<h2 id="contributing">Contributing</h2>
-<p>To contribute to Kahlan, <a href="https://help.github.com/articles/creating-a-pull-request/">open a pull request</a> against the <code>dev</code> branch with your change. Be sure to update the specs to verify your change works as expected and to prevent regressions.</p>
-<h2 id="documentation">Documentation</h2>
-<ul>
-<li><a href="getting-started.html">Getting Started</a>
-<ul>
-<li><a href="getting-started.html#requirements">Requirements</a></li>
-<li><a href="getting-started.html#installation">Installation</a></li>
-<li><a href="getting-started.html#running-kahlan">Running Kahlan</a></li>
-<li><a href="getting-started.html#directory-structure">Directory Structure</a></li>
-</ul></li>
-<li><a href="dsl.html">DSL</a></li>
-<li><a href="matchers.html">Matchers</a>
-<ul>
-<li><a href="matchers.html#classic">Classic matchers</a></li>
-<li><a href="matchers.html#method">Method invocation matchers</a></li>
-<li><a href="matchers.html#argument">Argument matchers</a></li>
-<li><a href="matchers.html#custom">Custom matchers</a></li>
-</ul></li>
-<li><a href="allow.html">Method Stubbing &amp; Monkey Patching</a>
-<ul>
-<li><a href="allow.html#method-stubbing">Replacing a method</a></li>
-<li><a href="allow.html#function-stubbing">Replacing a function</a></li>
-<li><a href="allow.html#monkey-patching">Replacing a class</a></li>
-</ul></li>
-<li><a href="test-double.html">Test Double</a>
-<ul>
-<li><a href="test-double.html#instance-double">Instance Double</a></li>
-<li><a href="test-double.html#class-double">Class Double</a></li>
-</ul></li>
-<li><a href="quit.html">Quit Statement Patching</a></li>
-<li><a href="cli-options.html">CLI Options</a></li>
-<li><a href="reporters.html">Reporters</a></li>
-<li><a href="pro-tips.html">Pro Tips</a> - including CLI arguments</li>
-<li><a href="config-file.html">The <code>kahlan-config.php</code> file</a></li>
-<li><a href="integration.html">Integration with popular frameworks</a></li>
-</ul>
+                    <h2 id="kahlan-documentation">Kahlan Documentation</h2>
+<p>The documentation is managed by <a href="http://couscous.io">couscous</a></p>
+<h2 id="getting-started">Getting started</h2>
+<pre><code>composer global require couscous/couscous</code></pre>
+<h2 id="documentation-preview">Documentation Preview</h2>
+<pre><code>couscous preview</code></pre>
+<h2 id="documentation-deploy">Documentation Deploy</h2>
+<pre><code>couscous deploy</code></pre>
                 </section>
 
             </div>
