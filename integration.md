@@ -35,6 +35,11 @@ To import all Laravel "test facilities" into Kahlan you can make use of [this de
 To use Kahlan in a Symfony 2.7+ environment, you can use [elephantly/kahlan-bundle](https://packagist.org/packages/elephantly/kahlan-bundle) ([GitHub link](https://github.com/elephantly/kahlan-bundle)).
 Symfony ServiceContainer is then available in your spec files and you just have to launch `php app/console kahlan:run` with usual options.
 
+### Atom
+
+You can now develop your kahlan tests in Atom with autocompletion thanks to [atom-kahlan](https://github.com/elephantly/atom-kahlan).
+Just go in your favorite editor's settings and install the package. Enjoy :)
+
 ### Phalcon
 
 When a class extends a built-in class (i.e. a non PHP class) it's not possible to stub parent class methods since they are not in PHP userland.
