@@ -38,7 +38,7 @@ Symfony ServiceContainer is then available in your spec files and you just have 
 ### Atom
 
 You can now develop your kahlan tests in Atom with autocompletion thanks to [atom-kahlan](https://github.com/elephantly/atom-kahlan).
-Just go in your favorite editor's settings and install the package. Enjoy :)
+Just go in your favorite editor's settings and install the package. 
 
 ### Phalcon
 
