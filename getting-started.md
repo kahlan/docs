@@ -6,7 +6,7 @@ currentMenu: getting-started
 
 <a name="requirements"></a>
 ### Requirements
-- PHP 5.5+
+- PHP 5.4+
 - [phpdbg](http://php.net/manual/en/debugger-about.php) or [Xdebug](http://xdebug.org/) (only required for code coverage analysis)
 
 
