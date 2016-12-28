@@ -24,12 +24,12 @@
                     <nav id="sidebar" class="col-sm-3 col-lg-2" role="navigation">
 
                         <ul class="nav nav-pills nav-stacked">
-                                                            <li class="">
+                                                            <li class="active">
                                     <a href="https://kahlan.github.io/docs/index.html">
                                         Overview
                                     </a>
                                 </li>
-                                                            <li class="active">
+                                                            <li class="">
                                     <a href="https://kahlan.github.io/docs/getting-started.html">
                                         Getting Started
                                     </a>
@@ -90,39 +90,14 @@
 
                 
                 <section id="content" class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
-                    <h2 id="getting-started">Getting Started</h2>
-<p><a name="requirements"></a></p>
-<h3 id="requirements">Requirements</h3>
-<ul>
-<li>PHP 5.4+</li>
-<li><a href="http://php.net/manual/en/debugger-about.php">phpdbg</a> or <a href="http://xdebug.org/">Xdebug</a> (only required for code coverage analysis)</li>
-</ul>
-<p><a name="installation"></a></p>
-<h3 id="installation">Installation</h3>
-<p>The recommended way to install Kahlan is with <a href="http://getcomposer.org/">Composer</a> as a <em>development</em> dependency of your project.</p>
-<pre><code class="language-bash">composer require --dev kahlan/kahlan</code></pre>
-<p>Alternatively, you may manually add <code>"kahlan/kahlan": "~3.0"</code> to the <code>require-dev</code> dependencies within your <code>composer.json</code>.</p>
-<p>The Kahlan package is installed with a vendor library and its binary accessible through <code>vendor/bin/kahlan</code> by default. However, you can <a href="https://getcomposer.org/doc/articles/vendor-binaries.html#can-vendor-binaries-be-installed-somewhere-other-than-vendor-bin-">configure</a> its location like all other composer vendor binaries.</p>
-<p><a name="running-kahlan"></a></p>
-<h2 id="running-kahlan">Running Kahlan</h2>
-<p>Once Kahlan is installed, you can run your tests (referred to as <em>specs</em>) with:</p>
-<pre><code class="language-bash">./vendor/bin/kahlan</code></pre>
-<p>For a full list of the options, see the <a href="cli-options.html">CLI Options</a>.</p>
-<p><a name="directory-structure"></a></p>
-<h3 id="directory-structure">Directory Structure</h3>
-<p>The recommended directory structure is to add a <code>spec</code> directory at the top level of your project. You may then place your <em>Spec</em> files within this directory. Spec files should have a <code>.spec.php</code> or <code>Spec.php</code> suffix. The <code>spec</code> directory should mirror the structure of your source code directory.</p>
-<p>An example directory structure would be:</p>
-<pre><code>├── spec                       # The directory containing your specs
-│   └── ClassA.spec.php
-│   └── subdir
-│       └── ClassB.spec.php
-├── src                        # The directory containing your source code
-│   └── ClassA.php
-│   └── subdir
-│       └── ClassB.php
-├── composer.json
-└── README.md</code></pre>
-<p>For basic, you can clone <a href="https://github.com/sitrunlab/learn-kahlan"><a href="https://github.com/sitrunlab/learn-kahlan">https://github.com/sitrunlab/learn-kahlan</a></a> to get started.</p>
+                    <h2 id="kahlan-documentation">Kahlan Documentation</h2>
+<p>The documentation is managed by <a href="http://couscous.io">couscous</a></p>
+<h2 id="getting-started">Getting started</h2>
+<pre><code>composer global require couscous/couscous</code></pre>
+<h2 id="documentation-preview">Documentation Preview</h2>
+<pre><code>couscous preview</code></pre>
+<h2 id="documentation-deploy">Documentation Deploy</h2>
+<pre><code>couscous deploy</code></pre>
                 </section>
 
             </div>
