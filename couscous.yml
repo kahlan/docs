@@ -9,6 +9,7 @@ subTitle: The PHP Test Framework for Freedom, Truth, and Justice
 
 template:
     directory: website
+    index: index.md
 
 menu:
     items:
