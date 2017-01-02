@@ -301,6 +301,7 @@ it("expects `time()` to be called", function() {
 it("expects `time()` to be called", function() {
     $foo = new Foo();
     allow('time')->toBeCalled()->andReturn(strtotime("now"));
+    expect('time')->toBeCalled();
     $foo->date();
 });
 ```
@@ -309,9 +310,10 @@ it("expects `time()` to be called", function() {
 it("expects `time()` to be called", function() {
     $foo = new Foo();
 
-    expect('time')->toBeCalled()->andRun(function() {
+    allow('time')->toBeCalled()->andRun(function() {
         return strtotime("now")
     });
+    expect('time')->toBeCalled();
 
     $foo->date();
 });
