@@ -219,7 +219,7 @@ it("expects $foo to receive message() with the correct param", function() {
 it("expects $foo to receive message() and bail out using a stub", function() {
     $foo = new Foo();
 
-    expect($foo)->toReceive('message')->andReturn('something');
+    allow($foo)->toReceive('message')->andReturn('something');
     expect($foo->message('My Message'))->toBe('something');
 });
 ```
@@ -300,7 +300,7 @@ it("expects `time()` to be called", function() {
 ```php
 it("expects `time()` to be called", function() {
     $foo = new Foo();
-    expect('time')->toBeCalled()->andReturn(strtotime("now"));
+    allow('time')->toBeCalled()->andReturn(strtotime("now"));
     $foo->date();
 });
 ```
