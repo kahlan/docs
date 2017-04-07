@@ -221,7 +221,7 @@
 <pre><code class="language-php">it("expects $foo to receive message() and bail out using a stub", function() {
     $foo = new Foo();
 
-    expect($foo)-&gt;toReceive('message')-&gt;andReturn('something');
+    allow($foo)-&gt;toReceive('message')-&gt;andReturn('something');
     expect($foo-&gt;message('My Message'))-&gt;toBe('something');
 });</code></pre>
 <p><strong>Note:</strong> When <code>andReturn()/andRun()</code> is not applied, <code>toReceive()</code> simply act as a &quot;spy&quot; and let the code execution flow to be unchanged. However when applied, the code execution will bail out with the stub value.</p>
@@ -272,15 +272,17 @@
 <p><strong>Note:</strong> When <code>andReturn()/andRun()</code> is not applied, <code>toBeCalled()</code> simply act as a &quot;spy&quot; and let the code execution flow to be unchanged. However when applied, the code execution will bail out with the stub value.</p>
 <pre><code class="language-php">it("expects `time()` to be called", function() {
     $foo = new Foo();
-    expect('time')-&gt;toBeCalled()-&gt;andReturn(strtotime("now"));
+    allow('time')-&gt;toBeCalled()-&gt;andReturn(strtotime("now"));
+    expect('time')-&gt;toBeCalled();
     $foo-&gt;date();
 });</code></pre>
 <pre><code class="language-php">it("expects `time()` to be called", function() {
     $foo = new Foo();
 
-    expect('time')-&gt;toBeCalled()-&gt;andRun(function() {
+    allow('time')-&gt;toBeCalled()-&gt;andRun(function() {
         return strtotime("now")
     });
+    expect('time')-&gt;toBeCalled();
 
     $foo-&gt;date();
 });</code></pre>
