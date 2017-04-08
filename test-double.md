@@ -76,9 +76,9 @@ And it's also possible to extends built-in PHP classes.
 ```php
 it("makes a instance double of a PHP core class", function() {
     $redis = Double::instance(['extends' => 'Redis']);
-    allow($redis)->method('connect')->andReturn(true);
+    allow($redis)->toReceive('connect')->andReturn(true);
 
-    expect($double->connect('127.0.0.1'))->toBe(true);
+    expect($redis->connect('127.0.0.1'))->toBe(true);
 });
 ```
 
