@@ -142,9 +142,9 @@
 <p>And it's also possible to extends built-in PHP classes.</p>
 <pre><code class="language-php">it("makes a instance double of a PHP core class", function() {
     $redis = Double::instance(['extends' =&gt; 'Redis']);
-    allow($redis)-&gt;method('connect')-&gt;andReturn(true);
+    allow($redis)-&gt;toReceive('connect')-&gt;andReturn(true);
 
-    expect($double-&gt;connect('127.0.0.1'))-&gt;toBe(true);
+    expect($redis-&gt;connect('127.0.0.1'))-&gt;toBe(true);
 });</code></pre>
 <p>If you need your stub to implement a couple of interfaces you can use the <code>'implements'</code> option like so:</p>
 <pre><code class="language-php">it("makes a instance double implementing some interfaces", function() {
