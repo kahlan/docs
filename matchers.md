@@ -194,7 +194,7 @@ it("passes if $closure echoes the expected regex output", function() {
 
 ```php
 it("passes if $actual matches the $expected closure logic", function() {
-    expect('Hello World!')->toMatchEcho(function($actual) {
+    expect(function() { echo 'Hello World!'; })->toMatchEcho(function($actual) {
         return $actual === 'Hello World!';
     });
 });
