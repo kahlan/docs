@@ -192,6 +192,14 @@ it("passes if $closure echoes the expected regex output", function() {
 });
 ```
 
+```php
+it("passes if $actual matches the $expected closure logic", function() {
+    expect('Hello World!')->toMatchEcho(function($actual) {
+        return $actual === 'Hello World!';
+    });
+});
+```
+
 ### <a name="method"></a>Method invocation matchers
 
 **Note:** You should **always remember** to use `toReceive` function **before** you call a method.
