@@ -205,7 +205,7 @@
     expect($closure)-&gt;toMatchEcho('/^H(.*?)!$/');
 });</code></pre>
 <pre><code class="language-php">it("passes if $actual matches the $expected closure logic", function() {
-    expect('Hello World!')-&gt;toMatchEcho(function($actual) {
+    expect(function() { echo 'Hello World!'; })-&gt;toMatchEcho(function($actual) {
         return $actual === 'Hello World!';
     });
 });</code></pre>
