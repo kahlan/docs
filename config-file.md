@@ -27,16 +27,16 @@ $commandLine->option('coverage-coveralls', 'default', 'coveralls.json');
 Filter::register('kahlan.coveralls', function($chain) {
 
     // Get the reporter called `'coverage'` from the list of reporters
-    $coverage = $this->reporters()->get('coverage');
+    $reporter = $this->reporters()->get('coverage');
 
     // Abort if no coverage is available.
-    if (!$coverage || !$this->commandLine()->exists('coverage-coveralls')) {
+    if (!$reporter || !$this->commandLine()->exists('coverage-coveralls')) {
         return $chain->next();
     }
 
     // Use the `Coveralls` class to write the JSON coverage into a file
     Coveralls::write([
-        'coverage' => $coverage,
+        'collector' => $reporter,
         'file' => $this->commandLine()->get('coverage-coveralls'),
         'service_name' => 'travis-ci',
         'service_job_id' => getenv('TRAVIS_JOB_ID') ?: null
@@ -51,7 +51,9 @@ Filter::apply($this, 'reporting', 'kahlan.coveralls');
 ?>
 ```
 
-Above `'kahlan.coveralls'` is just a custom name and could be whatever as long as `Filter::register()` and `Filter::apply()` are named consistently.
+Above `'kahlan.coveralls'` is a custom name and could be anything so long as `Filter::register()` and `Filter::apply()` are named consistently.
+
+See [`kahlan-config.travis.php`](https://github.com/kahlan/kahlan/blob/3.1.14/kahlan-config.travis.php) for a more complete configuration example.
 
 `$this` refer to the Kahlan instance so `$this->reporters()->get('coverage')` will give you the instance of the coverage reporter. This coverage reporter will contain all raw data which is passed to the `Coveralls` exporter to be formatter.
 
