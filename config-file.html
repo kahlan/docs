@@ -110,16 +110,16 @@ $commandLine-&gt;option('coverage-coveralls', 'default', 'coveralls.json');
 Filter::register('kahlan.coveralls', function($chain) {
 
     // Get the reporter called `'coverage'` from the list of reporters
-    $coverage = $this-&gt;reporters()-&gt;get('coverage');
+    $reporter = $this-&gt;reporters()-&gt;get('coverage');
 
     // Abort if no coverage is available.
-    if (!$coverage || !$this-&gt;commandLine()-&gt;exists('coverage-coveralls')) {
+    if (!$reporter || !$this-&gt;commandLine()-&gt;exists('coverage-coveralls')) {
         return $chain-&gt;next();
     }
 
     // Use the `Coveralls` class to write the JSON coverage into a file
     Coveralls::write([
-        'coverage' =&gt; $coverage,
+        'collector' =&gt; $reporter,
         'file' =&gt; $this-&gt;commandLine()-&gt;get('coverage-coveralls'),
         'service_name' =&gt; 'travis-ci',
         'service_job_id' =&gt; getenv('TRAVIS_JOB_ID') ?: null
@@ -132,7 +132,8 @@ Filter::register('kahlan.coveralls', function($chain) {
 // Apply the logic to the `'reporting'` entry point.
 Filter::apply($this, 'reporting', 'kahlan.coveralls');
 ?&gt;</code></pre>
-<p>Above <code>'kahlan.coveralls'</code> is just a custom name and could be whatever as long as <code>Filter::register()</code> and <code>Filter::apply()</code> are named consistently.</p>
+<p>Above <code>'kahlan.coveralls'</code> is a custom name and could be anything so long as <code>Filter::register()</code> and <code>Filter::apply()</code> are named consistently.</p>
+<p>See <a href="https://github.com/kahlan/kahlan/blob/3.1.14/kahlan-config.travis.php"><code>kahlan-config.travis.php</code></a> for a more complete configuration example.</p>
 <p><code>$this</code> refer to the Kahlan instance so <code>$this-&gt;reporters()-&gt;get('coverage')</code> will give you the instance of the coverage reporter. This coverage reporter will contain all raw data which is passed to the <code>Coveralls</code> exporter to be formatter.</p>
 <p>The filterable entry points are the following:</p>
 <ul>
