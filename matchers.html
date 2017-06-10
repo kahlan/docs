@@ -179,6 +179,14 @@
     expect($closure)-&gt;toThrow(new RuntimeException());
     expect($closure)-&gt;toThrow(new RuntimeException('exception message'));
 });</code></pre>
+<pre><code class="language-php">it("calls the closure under the hood", function() {
+    $count = 0;
+    $closure = function() use (&amp;$count) {
+        count++;
+    };
+    expect($closure)-&gt;not-&gt;toThrow(); // Closure called here
+    expect($count)-&gt;toBe(1);
+});</code></pre>
 <p><strong>toMatch($expected)</strong></p>
 <pre><code class="language-php">it("passes if $actual matches the $expected regexp", function() {
     expect('Hello World!')-&gt;toMatch('/^H(.*?)!$/');
