@@ -152,6 +152,17 @@ it("passes if $closure throws the $expected exception", function() {
 });
 ```
 
+```php
+it("calls the closure under the hood", function() {
+    $count = 0;
+    $closure = function() use (&$count) {
+        count++;
+    };
+    expect($closure)->not->toThrow(); // Closure called here
+    expect($count)->toBe(1);
+});
+```
+
 **toMatch($expected)**
 
 ```php
