@@ -73,6 +73,11 @@ a:hover, a:focus {
     color: #3c3c72;
 }
 
+.banner {
+    background-color: #f0f0f0;
+    padding: 10px 20px;
+}
+
 .page-header {
     margin-top: 0;
 }
