@@ -13,17 +13,14 @@ You will need to configure your Kahlan config file to manually add to the Compos
 Let's take a situation where you have the following directories: `app/models/` and  `app/controllers/` and each one are respectively attached to the `Api\Models` and `Api\Controllers` namespaces. To autoload them with Kahlan you will need to manually add these PSR-4 namespaces in your **kahlan-config.php** config file:
 
 ```php
-use Kahlan\Filter\Filter;
+use Kahlan\Filter\Filters;
 
-Filter::register('mycustom.namespaces', function($chain) {
-
+Filters::apply($this, 'namespaces', function($chain) {
   $this->autoloader()->addPsr4('Api\\Models\\', __DIR__ . '/app/models/');
   $this->autoloader()->addPsr4('Api\\Controllers\\', __DIR__ . '/app/controllers/');
   return $chain->next();
 
 });
-
-Filter::apply($this, 'namespaces', 'mycustom.namespaces');
 ```
 
 ### Laravel
@@ -38,7 +35,7 @@ Symfony ServiceContainer is then available in your spec files and you just have 
 ### Atom
 
 You can now develop your kahlan tests in Atom with autocompletion thanks to [atom-kahlan](https://github.com/elephantly/atom-kahlan).
-Just go in your favorite editor's settings and install the package. 
+Just go in your favorite editor's settings and install the package.
 
 ### Phalcon
 
@@ -87,14 +84,11 @@ The workaround here is to add the Kahlan's `Layer` patcher in [your `kahlan-conf
 So for our example above, the `Layer` patcher can be configured like the following in [your `kahlan-config.php` file](config-file.md):
 
 ```php
-use Kahlan\Filter\Filter;
-use Kahlan\Jit\Interceptor;
+use Kahlan\Filter\Filters;
 use Kahlan\Jit\Patcher\Layer;
 
-Filter::register('api.patchers', function($chain) {
-    $interceptor = Interceptor::instance();
-    $patchers = $interceptor->patchers();
-    $patchers->add('layer', new Layer([
+Filters::apply($this, 'patchers', function($chain) {
+    $this->autoloader()->patchers()->add('layer', new Layer([
         'override' => [
             'Phalcon\Mvc\Model' // apply a layer on top of all classes extending `Phalcon\Mvc\Model`.
         ]
@@ -102,8 +96,6 @@ Filter::register('api.patchers', function($chain) {
 
     return $chain->next();
 });
-
-Filter::apply($this, 'patchers', 'api.patchers');
 ```
 
 **Note:** You will probably need to remove all cached files using `kahlan --cc`.
@@ -113,10 +105,10 @@ Filter::apply($this, 'patchers', 'api.patchers');
 If you need to load non PSR-0 compatible classes simply add "composer/composer": "^1.2" in your require-dev section and use Composer\Autoload\ClassMapGenerator; in your kahlan config file to generate a class map. For example, when you need to use it in [CodeIgniter <=3.1.2](https://codeigniter.com/), you can do the following:
 
 ```php
-use Kahlan\Filter\Filter;
+use Kahlan\Filter\Filters;
 use Composer\Autoload\ClassMapGenerator;
 
-Filter::register('custom.autoloader', function($chain) {
+Filters::apply($this, 'namespaces', function($chain) {
     $this->autoloader()->addClassMap(
         ClassMapGenerator::createMap(BASEPATH . 'core')
     );
@@ -129,5 +121,4 @@ Filter::register('custom.autoloader', function($chain) {
 
     return $chain->next();
 });
-Filter::apply($this, 'namespaces', 'custom.autoloader');
 ```

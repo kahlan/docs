@@ -102,17 +102,14 @@ The next step is to register your new reporter so you'll need to create you own 
 Example of config file:
 ```php
 <?php
-use Kahlan\Filter\Filter;
+use Kahlan\Filter\Filters;
 use My\Namespace\Reporter\MyReporter;
 
-// The logic to inlude into the workflow.
-Filter::register('kahlan.myconsole', function($chain) {
+// Apply our logic to the `'console'` entry point.
+Filters::apply($this, 'console', function($chain) {
     $reporters = $this->reporters();
     $reporters->add('myconsole', new MyReporter(['start' => $this->_start));
 });
-
-// Apply our logic to the `'console'` entry point.
-Filter::apply($this, 'console', 'kahlan.myconsole');
 ?>
 ```
 

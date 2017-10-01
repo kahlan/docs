@@ -12,7 +12,7 @@ Example of a config file:
 
 ```php
 <?php
-use Kahlan\Filter\Filter;
+use Kahlan\Filter\Filters;
 use Kahlan\Reporter\Coverage\Exporter\Coveralls;
 
 // It overrides some default option values.
@@ -23,8 +23,8 @@ $commandLine->option('coverage', 'default', 3);
 $commandLine->option('coverage-scrutinizer', 'default', 'scrutinizer.xml');
 $commandLine->option('coverage-coveralls', 'default', 'coveralls.json');
 
-// The logic to include into the workflow.
-Filter::register('kahlan.coveralls', function($chain) {
+// Apply the logic to the `'reporting'` entry point.
+Filters::apply('$this, 'reporting', function($chain) {
 
     // Get the reporter called `'coverage'` from the list of reporters
     $reporter = $this->reporters()->get('coverage');
@@ -45,13 +45,8 @@ Filter::register('kahlan.coveralls', function($chain) {
     // Continue the chain
     return $chain->next();
 });
-
-// Apply the logic to the `'reporting'` entry point.
-Filter::apply($this, 'reporting', 'kahlan.coveralls');
 ?>
 ```
-
-Above `'kahlan.coveralls'` is a custom name and could be anything so long as `Filter::register()` and `Filter::apply()` are named consistently.
 
 See [`kahlan-config.travis.php`](https://github.com/kahlan/kahlan/blob/3.1.14/kahlan-config.travis.php) for a more complete configuration example.
 
@@ -60,9 +55,8 @@ See [`kahlan-config.travis.php`](https://github.com/kahlan/kahlan/blob/3.1.14/ka
 The filterable entry points are the following:
 
 * `'workflow`'           # The one to rule them all
-  * `'interceptor`'      # Operations on the autoloader
-  * `'namespaces`'       # Adds some namespaces not managed by composer (like `spec`)
   * `'patchers`'         # Adds patchers
+  * `'namespaces`'       # Adds some namespaces not managed by composer (like `spec`)
   * `'loadSpecs`'        # Loads specs
   * `'reporters`'        # Adds reporters
     * `'console'`        # Creates the console reporter
