@@ -49,7 +49,7 @@
                                         Stubs & Monkey Patching DSL
                                     </a>
                                 </li>
-                                                            <li class="active">
+                                                            <li class="">
                                     <a href="https://kahlan.github.io/docs/test-double.html">
                                         Test Double
                                     </a>
@@ -79,7 +79,7 @@
                                         Kahlan-config.php
                                     </a>
                                 </li>
-                                                            <li class="">
+                                                            <li class="active">
                                     <a href="https://kahlan.github.io/docs/integration.html">
                                         Integration with popular frameworks
                                     </a>
@@ -102,94 +102,99 @@
 
                 
                 <section id="content" class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
-                    <h2 id="test-double">Test Double</h2>
-<p>First add the following <code>use</code> statement in the top of your specs to be able to create test doubles:</p>
-<pre><code class="language-php">use Kahlan\Plugin\Double;</code></pre>
-<p><a name="instance-double"></a></p>
-<h3 id="instance-double">Instance Double</h3>
-<p>When you are testing an application, sometimes you need a simple, polyvalent instance for receiving a couple of calls. <code>Double::instance()</code> can create such polyvalent instance:</p>
-<pre><code class="language-php">it("makes a instance double", function() {
-    $double = Double::instance();
+                    <h2 id="integration-with-popular-frameworks">Integration with popular frameworks</h2>
+<p>Kahlan relies on the Composer autoloader. As such, it is compatible with most frameworks. However a couple popular frameworks use their own autoloader, so you will need to add your namespaces to be autoloaded correctly in the test environment.</p>
+<p>You will need to configure your Kahlan config file to manually add to the Composer autoloader which are &quot;outside the composer scope&quot;.</p>
+<h3 id="working-with-a-psr-0-compatible-architecture">Working with a PSR-0 compatible architecture.</h3>
+<p>Let's take a situation where you have the following directories: <code>app/models/</code> and  <code>app/controllers/</code> and each one are respectively attached to the <code>Api\Models</code> and <code>Api\Controllers</code> namespaces. To autoload them with Kahlan you will need to manually add these PSR-4 namespaces in your <strong>kahlan-config.php</strong> config file:</p>
+<pre><code class="language-php">use Kahlan\Filter\Filter;
 
-    expect(is_object($double))-&gt;toBe(true);
-    expect($double-&gt;something())-&gt;toBe(null);
+Filter::register('mycustom.namespaces', function($chain) {
+
+  $this-&gt;autoloader()-&gt;addPsr4('Api\\Models\\', __DIR__ . '/app/models/');
+  $this-&gt;autoloader()-&gt;addPsr4('Api\\Controllers\\', __DIR__ . '/app/controllers/');
+  return $chain-&gt;next();
+
+});
+
+Filter::apply($this, 'namespaces', 'mycustom.namespaces');</code></pre>
+<h3 id="laravel">Laravel</h3>
+<p>To import all Laravel &quot;test facilities&quot; into Kahlan you can make use of <a href="https://github.com/jarektkaczyk/laravel-kahlan">this dedicated plugin</a>.</p>
+<h3 id="symfony">Symfony</h3>
+<p>To use Kahlan in a Symfony 2.7+ environment, you can use <a href="https://packagist.org/packages/elephantly/kahlan-bundle">elephantly/kahlan-bundle</a> (<a href="https://elephantly.github.io/kahlan-bundle/">GitHub documentation</a>).
+Symfony ServiceContainer is then available in your spec files and you just have to launch <code>php app/console kahlan:run</code> with usual options.</p>
+<h3 id="atom">Atom</h3>
+<p>You can now develop your kahlan tests in Atom with autocompletion thanks to <a href="https://github.com/elephantly/atom-kahlan">atom-kahlan</a>.
+Just go in your favorite editor's settings and install the package. </p>
+<h3 id="phalcon">Phalcon</h3>
+<p>When a class extends a built-in class (i.e. a non PHP class) it's not possible to stub parent class methods since they are not in PHP userland.</p>
+<p>Long story short, let's take the following example as an illustration:</p>
+<p>We have a model:</p>
+<pre><code class="language-php">namespace Api\Models;
+
+class MyModel extends \Phalcon\Mvc\Model
+{
+}</code></pre>
+<p>And we want <code>findFirst()</code> to return a stubbed result. This can be translated into the following spec:</p>
+<pre><code class="language-php">namespace Api\Spec\Contollers;
+
+use Api\Models\MyModel;
+
+describe("MyModel", function() {
+
+    it("stubs findFirst as an example", function() {
+
+        $article = new MyModel();
+
+        allow('Api\Models\MyModel')-&gt;toReceive('::findFirst')-&gt;andReturn($article);
+
+        $actual = MyModel::findFirst();
+
+        expect($actual)-&gt;toBe($article);
+
+    });
+
 });</code></pre>
-<p>There are also a couple of options for creating some stubs which inherit a class, implement interfaces or use traits.</p>
-<p>Examples using <code>'extends'</code>:</p>
-<pre><code class="language-php">it("makes a instance double with a parent class", function() {
-    $double = Double::instance(['extends' =&gt; 'Kahlan\Util\Text']);
+<p>Unfortunately it doesn't work out of the box because <code>MyModel</code> extends <code>Phalcon\Mvc\Model</code> which is a core class (i.e a class compiled from C sources). So <code>MyModel::findFirst()</code> doesn't exist in PHP userland and can't be stubbed.</p>
+<p>The workaround here is to add the Kahlan's <code>Layer</code> patcher in <a href="config-file.html">your <code>kahlan-config.php</code> file</a>. The <code>Layer</code> patcher will dynamically replace all <code>extends</code> done on core class to an intermediate layer class in PHP.</p>
+<p>So for our example above, the <code>Layer</code> patcher can be configured like the following in <a href="config-file.html">your <code>kahlan-config.php</code> file</a>:</p>
+<pre><code class="language-php">use Kahlan\Filter\Filter;
+use Kahlan\Jit\Interceptor;
+use Kahlan\Jit\Patcher\Layer;
 
-    expect(is_object($double))-&gt;toBe(true);
-    expect(get_parent_class($double))-&gt;toBe('Kahlan\Util\Text');
-});</code></pre>
-<p><strong>Tip:</strong> If you extend an abstract class, all missing methods will be automatically added to your stub.</p>
-<p><strong>Note:</strong> If the <code>'extends'</code> option is used, magic methods <strong>won't be included</strong>, so as to avoid any conflict between your tested classes and the magic methods.</p>
-<p>However, if you still want to include magic methods with the <code>'extends'</code> option, you can manually set the <code>'magicMethods'</code> option to <code>true</code>:</p>
-<pre><code class="language-php">it("makes a instance double with a parent class and keeps magic methods", function() {
-    $double = Double::instance([
-        'extends'      =&gt; 'Kahlan\Util\Text',
-        'magicMethods' =&gt; true
-    ]);
+Filter::register('api.patchers', function($chain) {
+    $interceptor = Interceptor::instance();
+    $patchers = $interceptor-&gt;patchers();
+    $patchers-&gt;add('layer', new Layer([
+        'override' =&gt; [
+            'Phalcon\Mvc\Model' // apply a layer on top of all classes extending `Phalcon\Mvc\Model`.
+        ]
+    ]));
 
-    expect($double)-&gt;toReceive('__get')-&gt;ordered;
-    expect($double)-&gt;toReceive('__set')-&gt;ordered;
-    expect($double)-&gt;toReceive('__isset')-&gt;ordered;
-    expect($double)-&gt;toReceive('__unset')-&gt;ordered;
-    expect($double)-&gt;toReceive('__sleep')-&gt;ordered;
-    expect($double)-&gt;toReceive('__toString')-&gt;ordered;
-    expect($double)-&gt;toReceive('__invoke')-&gt;ordered;
-    expect(get_class($double))-&gt;toReceive('__wakeup')-&gt;ordered;
-    expect(get_class($double))-&gt;toReceiveNext('__clone')-&gt;ordered;
+    return $chain-&gt;next();
+});
 
-    $prop = $double-&gt;prop;
-    $double-&gt;prop = $prop;
-    isset($double-&gt;prop);
-    unset($double-&gt;prop);
-    $serialized = serialize($double);
-    $string = (string) $double;
-    $double();
-    unserialize($serialized);
-    $double2 = clone $double;
-});</code></pre>
-<p>And it's also possible to extends built-in PHP classes.</p>
-<pre><code class="language-php">it("makes a instance double of a PHP core class", function() {
-    $redis = Double::instance(['extends' =&gt; 'Redis']);
-    allow($redis)-&gt;toReceive('connect')-&gt;andReturn(true);
+Filter::apply($this, 'patchers', 'api.patchers');</code></pre>
+<p><strong>Note:</strong> You will probably need to remove all cached files using <code>kahlan --cc</code>.</p>
+<h3 id="working-with-a-custom-autoloader-not-compatible-with-psr-0">Working with a custom autoloader not compatible with PSR-0.</h3>
+<p>If you need to load non PSR-0 compatible classes simply add &quot;composer/composer&quot;: &quot;^1.2&quot; in your require-dev section and use Composer\Autoload\ClassMapGenerator; in your kahlan config file to generate a class map. For example, when you need to use it in <a href="https://codeigniter.com/">CodeIgniter &lt;=3.1.2</a>, you can do the following:</p>
+<pre><code class="language-php">use Kahlan\Filter\Filter;
+use Composer\Autoload\ClassMapGenerator;
 
-    expect($redis-&gt;connect('127.0.0.1'))-&gt;toBe(true);
-});</code></pre>
-<p>If you need your stub to implement a couple of interfaces you can use the <code>'implements'</code> option like so:</p>
-<pre><code class="language-php">it("makes a instance double implementing some interfaces", function() {
-    $double = Double::instance(['implements' =&gt; ['ArrayAccess', 'Iterator']]);
-    $interfaces = class_implements($double);
+Filter::register('custom.autoloader', function($chain) {
+    $this-&gt;autoloader()-&gt;addClassMap(
+        ClassMapGenerator::createMap(BASEPATH . 'core')
+    );
+    $this-&gt;autoloader()-&gt;addClassMap(
+        ClassMapGenerator::createMap(APPPATH . 'controllers')
+    );
+    $this-&gt;autoloader()-&gt;addClassMap(
+        ClassMapGenerator::createMap(APPPATH . 'models')
+    );
 
-    expect($interfaces)-&gt;toHaveLength(3);
-    expect(isset($interfaces['ArrayAccess']))-&gt;toBe(true);
-    expect(isset($interfaces['Iterator']))-&gt;toBe(true);
-    expect(isset($interfaces['Traversable']))-&gt;toBe(true); //Comes with `'Iterator'`
-});</code></pre>
-<p>And if you need your stub to implement a couple of traits you can use the <code>'uses'</code> option like so:</p>
-<pre><code class="language-php">it("makes a instance double using a trait", function() {
-    $double = Double::instance(['uses' =&gt; 'spec\mock\plugin\stub\HelloTrait']);
-
-    expect($double-&gt;hello())-&gt;toBe('Hello World From Trait!');
-});</code></pre>
-<p><strong>Note:</strong> Generated stubs implements by default <code>__call()</code>, <code>__callStatic()</code>,<code>__get()</code>, <code>__set()</code> and some other magic methods for a maximum of polyvalence.</p>
-<p>So <code>allow()</code> on stubs can be applied on any method name. Under the hood <code>__call()</code> will catch everything. You should pay attention that <code>method_exists</code> won't work on this &quot;virtual method stubs&quot;. To make it works, you will need to add the necessary &quot;endpoint(s)&quot; using the <code>'methods'</code> option like in the following example:</p>
-<pre><code class="language-php">it("adds a custom endpoint", function() {
-    $double = Double::instance(['methods' =&gt; ['myMethod']]);
-
-    expect(method_exists($double, 'myMethod'))-&gt;toBe(true);
-});</code></pre>
-<h3><a name="class-double"></a>Class Double</h3>
-<p>You can also create class double names (i.e a string) using <code>Double::classname()</code>:</p>
-<pre><code class="language-php">it("makes a class double", function() {
-    $class = Double::classname();
-    expect(is_string($class))-&gt;toBe(true);
-
-    $double = new $class()
-    expect($double)-&gt;toBeAnInstanceOf($class);
-});</code></pre>
+    return $chain-&gt;next();
+});
+Filter::apply($this, 'namespaces', 'custom.autoloader');</code></pre>
                 </section>
 
             </div>

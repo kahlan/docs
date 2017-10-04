@@ -49,7 +49,7 @@
                                         Stubs & Monkey Patching DSL
                                     </a>
                                 </li>
-                                                            <li class="active">
+                                                            <li class="">
                                     <a href="https://kahlan.github.io/docs/test-double.html">
                                         Test Double
                                     </a>
@@ -59,7 +59,7 @@
                                         Quit
                                     </a>
                                 </li>
-                                                            <li class="">
+                                                            <li class="active">
                                     <a href="https://kahlan.github.io/docs/cli-options.html">
                                         CLI Options
                                     </a>
@@ -102,94 +102,55 @@
 
                 
                 <section id="content" class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
-                    <h2 id="test-double">Test Double</h2>
-<p>First add the following <code>use</code> statement in the top of your specs to be able to create test doubles:</p>
-<pre><code class="language-php">use Kahlan\Plugin\Double;</code></pre>
-<p><a name="instance-double"></a></p>
-<h3 id="instance-double">Instance Double</h3>
-<p>When you are testing an application, sometimes you need a simple, polyvalent instance for receiving a couple of calls. <code>Double::instance()</code> can create such polyvalent instance:</p>
-<pre><code class="language-php">it("makes a instance double", function() {
-    $double = Double::instance();
+                    <h2 id="cli-options">CLI Options</h2>
+<p>Below are all of Kahlan's option obtained through the <code>kahlan --help</code> command line.</p>
+<pre><code>Configuration Options:
 
-    expect(is_object($double))-&gt;toBe(true);
-    expect($double-&gt;something())-&gt;toBe(null);
-});</code></pre>
-<p>There are also a couple of options for creating some stubs which inherit a class, implement interfaces or use traits.</p>
-<p>Examples using <code>'extends'</code>:</p>
-<pre><code class="language-php">it("makes a instance double with a parent class", function() {
-    $double = Double::instance(['extends' =&gt; 'Kahlan\Util\Text']);
+  --config=&lt;file&gt;                     The PHP configuration file to use (default: `'kahlan-config.php'`).
+  --src=&lt;path&gt;                        Paths of source directories (default: `['src']`).
+  --spec=&lt;path&gt;                       Paths of specification directories (default: `['spec']`).
+  --pattern=&lt;pattern&gt;                 A shell wildcard pattern (default: `'*Spec.php'`).
 
-    expect(is_object($double))-&gt;toBe(true);
-    expect(get_parent_class($double))-&gt;toBe('Kahlan\Util\Text');
-});</code></pre>
-<p><strong>Tip:</strong> If you extend an abstract class, all missing methods will be automatically added to your stub.</p>
-<p><strong>Note:</strong> If the <code>'extends'</code> option is used, magic methods <strong>won't be included</strong>, so as to avoid any conflict between your tested classes and the magic methods.</p>
-<p>However, if you still want to include magic methods with the <code>'extends'</code> option, you can manually set the <code>'magicMethods'</code> option to <code>true</code>:</p>
-<pre><code class="language-php">it("makes a instance double with a parent class and keeps magic methods", function() {
-    $double = Double::instance([
-        'extends'      =&gt; 'Kahlan\Util\Text',
-        'magicMethods' =&gt; true
-    ]);
+Reporter Options:
 
-    expect($double)-&gt;toReceive('__get')-&gt;ordered;
-    expect($double)-&gt;toReceive('__set')-&gt;ordered;
-    expect($double)-&gt;toReceive('__isset')-&gt;ordered;
-    expect($double)-&gt;toReceive('__unset')-&gt;ordered;
-    expect($double)-&gt;toReceive('__sleep')-&gt;ordered;
-    expect($double)-&gt;toReceive('__toString')-&gt;ordered;
-    expect($double)-&gt;toReceive('__invoke')-&gt;ordered;
-    expect(get_class($double))-&gt;toReceive('__wakeup')-&gt;ordered;
-    expect(get_class($double))-&gt;toReceiveNext('__clone')-&gt;ordered;
+  --reporter=&lt;name&gt;[:&lt;output_file&gt;]   The name of the text reporter to use, the built-in text reporters
+                                      are `'dot'`, `'bar'`, `'json'`, `'tap'` &amp; `'verbose'` (default: `'dot'`).
+                                      You can optionally redirect the reporter output to a file by using the
+                                      colon syntax (multiple --reporter options are also supported).
 
-    $prop = $double-&gt;prop;
-    $double-&gt;prop = $prop;
-    isset($double-&gt;prop);
-    unset($double-&gt;prop);
-    $serialized = serialize($double);
-    $string = (string) $double;
-    $double();
-    unserialize($serialized);
-    $double2 = clone $double;
-});</code></pre>
-<p>And it's also possible to extends built-in PHP classes.</p>
-<pre><code class="language-php">it("makes a instance double of a PHP core class", function() {
-    $redis = Double::instance(['extends' =&gt; 'Redis']);
-    allow($redis)-&gt;toReceive('connect')-&gt;andReturn(true);
+Code Coverage Options:
 
-    expect($redis-&gt;connect('127.0.0.1'))-&gt;toBe(true);
-});</code></pre>
-<p>If you need your stub to implement a couple of interfaces you can use the <code>'implements'</code> option like so:</p>
-<pre><code class="language-php">it("makes a instance double implementing some interfaces", function() {
-    $double = Double::instance(['implements' =&gt; ['ArrayAccess', 'Iterator']]);
-    $interfaces = class_implements($double);
+  --coverage=&lt;integer|string&gt;         Generate code coverage report. The value specify the level of
+                                      detail for the code coverage report (0-4). If a namespace, class, or
+                                      method definition is provided, it will generate a detailed code
+                                      coverage of this specific scope (default `''`).
+  --clover=&lt;file&gt;                     Export code coverage report into a Clover XML format.
+  --istanbul=&lt;file&gt;                   Export code coverage report into an istanbul compatible JSON format.
+  --lcov=&lt;file&gt;                       Export code coverage report into a lcov compatible text format.
 
-    expect($interfaces)-&gt;toHaveLength(3);
-    expect(isset($interfaces['ArrayAccess']))-&gt;toBe(true);
-    expect(isset($interfaces['Iterator']))-&gt;toBe(true);
-    expect(isset($interfaces['Traversable']))-&gt;toBe(true); //Comes with `'Iterator'`
-});</code></pre>
-<p>And if you need your stub to implement a couple of traits you can use the <code>'uses'</code> option like so:</p>
-<pre><code class="language-php">it("makes a instance double using a trait", function() {
-    $double = Double::instance(['uses' =&gt; 'spec\mock\plugin\stub\HelloTrait']);
+Test Execution Options:
 
-    expect($double-&gt;hello())-&gt;toBe('Hello World From Trait!');
-});</code></pre>
-<p><strong>Note:</strong> Generated stubs implements by default <code>__call()</code>, <code>__callStatic()</code>,<code>__get()</code>, <code>__set()</code> and some other magic methods for a maximum of polyvalence.</p>
-<p>So <code>allow()</code> on stubs can be applied on any method name. Under the hood <code>__call()</code> will catch everything. You should pay attention that <code>method_exists</code> won't work on this &quot;virtual method stubs&quot;. To make it works, you will need to add the necessary &quot;endpoint(s)&quot; using the <code>'methods'</code> option like in the following example:</p>
-<pre><code class="language-php">it("adds a custom endpoint", function() {
-    $double = Double::instance(['methods' =&gt; ['myMethod']]);
+  --ff=&lt;integer&gt;                      Fast fail option. `0` mean unlimited (default: `0`).
+  --no-colors=&lt;boolean&gt;               To turn off colors. (default: `false`).
+  --no-header=&lt;boolean&gt;               To turn off header. (default: `false`).
+  --include=&lt;string&gt;                  Paths to include for patching. (default: `['*']`).
+  --exclude=&lt;string&gt;                  Paths to exclude from patching. (default: `[]`).
+  --persistent=&lt;boolean&gt;              Cache patched files (default: `true`).
+  --cc=&lt;boolean&gt;                      Clear cache before spec run. (default: `false`).
+  --autoclear                         Classes to autoclear after each spec (default: [
+                                          `'Kahlan\Plugin\Monkey'`,
+                                          `'Kahlan\Plugin\Call'`,
+                                          `'Kahlan\Plugin\Stub'`,
+                                          `'Kahlan\Plugin\Quit'`
+                                      ])
 
-    expect(method_exists($double, 'myMethod'))-&gt;toBe(true);
-});</code></pre>
-<h3><a name="class-double"></a>Class Double</h3>
-<p>You can also create class double names (i.e a string) using <code>Double::classname()</code>:</p>
-<pre><code class="language-php">it("makes a class double", function() {
-    $class = Double::classname();
-    expect(is_string($class))-&gt;toBe(true);
+Miscellaneous Options:
 
-    $double = new $class()
-    expect($double)-&gt;toBeAnInstanceOf($class);
-});</code></pre>
+  --help                 Prints this usage information.
+  --version              Prints Kahlan version
+
+Note: The `[]` notation in default values mean that the related option can accepts an array of values.
+To add additional values, just repeat the same option many times in the command line.</code></pre>
                 </section>
 
             </div>

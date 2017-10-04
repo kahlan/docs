@@ -86,6 +86,18 @@
                                 </li>
                                                     </ul>
 
+                        <hr/>
+
+                        <div class="archive">
+                            <span>Archives</span>
+                            <ul class="nav nav-pills nav-stacked">
+                                <li>
+                                    <a href="3.x/index.html">
+                                        V3 docs
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </nav>
 
                 
@@ -95,7 +107,7 @@
 <p>Kahlan attempts to load the <code>kahlan-config.php</code> file from the current directory as the default config file. However you can define your own path using the <code>--config=myconfigfile.php</code> option in the command line. Custom <code>--config</code> can be useful if you want to use some specific configuration for Travis or something else.</p>
 <p>Example of a config file:</p>
 <pre><code class="language-php">&lt;?php
-use Kahlan\Filter\Filter;
+use Kahlan\Filter\Filters;
 use Kahlan\Reporter\Coverage\Exporter\Coveralls;
 
 // It overrides some default option values.
@@ -106,8 +118,8 @@ $commandLine-&gt;option('coverage', 'default', 3);
 $commandLine-&gt;option('coverage-scrutinizer', 'default', 'scrutinizer.xml');
 $commandLine-&gt;option('coverage-coveralls', 'default', 'coveralls.json');
 
-// The logic to include into the workflow.
-Filter::register('kahlan.coveralls', function($chain) {
+// Apply the logic to the `'reporting'` entry point.
+Filters::apply('$this, 'reporting', function($chain) {
 
     // Get the reporter called `'coverage'` from the list of reporters
     $reporter = $this-&gt;reporters()-&gt;get('coverage');
@@ -128,20 +140,15 @@ Filter::register('kahlan.coveralls', function($chain) {
     // Continue the chain
     return $chain-&gt;next();
 });
-
-// Apply the logic to the `'reporting'` entry point.
-Filter::apply($this, 'reporting', 'kahlan.coveralls');
 ?&gt;</code></pre>
-<p>Above <code>'kahlan.coveralls'</code> is a custom name and could be anything so long as <code>Filter::register()</code> and <code>Filter::apply()</code> are named consistently.</p>
 <p>See <a href="https://github.com/kahlan/kahlan/blob/3.1.14/kahlan-config.travis.php"><code>kahlan-config.travis.php</code></a> for a more complete configuration example.</p>
 <p><code>$this</code> refer to the Kahlan instance so <code>$this-&gt;reporters()-&gt;get('coverage')</code> will give you the instance of the coverage reporter. This coverage reporter will contain all raw data which is passed to the <code>Coveralls</code> exporter to be formatter.</p>
 <p>The filterable entry points are the following:</p>
 <ul>
 <li><code>'workflow</code>'           # The one to rule them all
 <ul>
-<li><code>'interceptor</code>'      # Operations on the autoloader</li>
-<li><code>'namespaces</code>'       # Adds some namespaces not managed by composer (like <code>spec</code>)</li>
 <li><code>'patchers</code>'         # Adds patchers</li>
+<li><code>'namespaces</code>'       # Adds some namespaces not managed by composer (like <code>spec</code>)</li>
 <li><code>'loadSpecs</code>'        # Loads specs</li>
 <li><code>'reporters</code>'        # Adds reporters</li>
 <li><code>'console'</code>        # Creates the console reporter</li>

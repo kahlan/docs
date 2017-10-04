@@ -49,7 +49,7 @@
                                         Stubs & Monkey Patching DSL
                                     </a>
                                 </li>
-                                                            <li class="active">
+                                                            <li class="">
                                     <a href="https://kahlan.github.io/docs/test-double.html">
                                         Test Double
                                     </a>
@@ -64,7 +64,7 @@
                                         CLI Options
                                     </a>
                                 </li>
-                                                            <li class="">
+                                                            <li class="active">
                                     <a href="https://kahlan.github.io/docs/reporters.html">
                                         Reporters
                                     </a>
@@ -102,94 +102,99 @@
 
                 
                 <section id="content" class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
-                    <h2 id="test-double">Test Double</h2>
-<p>First add the following <code>use</code> statement in the top of your specs to be able to create test doubles:</p>
-<pre><code class="language-php">use Kahlan\Plugin\Double;</code></pre>
-<p><a name="instance-double"></a></p>
-<h3 id="instance-double">Instance Double</h3>
-<p>When you are testing an application, sometimes you need a simple, polyvalent instance for receiving a couple of calls. <code>Double::instance()</code> can create such polyvalent instance:</p>
-<pre><code class="language-php">it("makes a instance double", function() {
-    $double = Double::instance();
+                    <h2 id="reporters">Reporters</h2>
+<p>Kahlan provides a flexible reporter system which can be extended easily.</p>
+<p>There are three build-in reporters and the default is the dotted one:</p>
+<pre><code class="language-php">./bin/kahlan --reporter=dot # Default value</code></pre>
+<p>You can optionally export reporter output to a file</p>
+<pre><code class="language-php">./bin/kahlan --reporter=dot:/some/file/path.txt</code></pre>
+<p>You can also use multiple reporters e.g.:</p>
+<pre><code class="language-php">./bin/kahlan --reporter=dot --reporter=json:/some/file/path.json</code></pre>
+<p>It can be pretty handy to do multiple reports at the same time.</p>
+<p>Note: don't use more than one reporter as console reporter otherwise the console outputs will be mixed altogether.</p>
+<p>To use a reporter which looks like more a progress bar use the following option:</p>
+<pre><code class="language-php">./bin/kahlan --reporter=bar
+./bin/kahlan --reporter=verbose</code></pre>
+<p>You can easily roll you own if these reporters don't fit your needs.</p>
+<p>For example, if you want a console based reporter, create a PHP class which extends <code>Kahlan\Reporter\Terminal</code>. The <code>Terminal</code> class offers some useful methods like <code>write()</code> for doing some echos on the terminal. But if you wanted to create some kind of JSON reporter extending from <code>Kahlan\Reporter\Reporter</code> would be enough.</p>
+<p>Example of a custom console reporter:</p>
+<pre><code class="language-php">&lt;?php
+namespace My\Namespace;
 
-    expect(is_object($double))-&gt;toBe(true);
-    expect($double-&gt;something())-&gt;toBe(null);
-});</code></pre>
-<p>There are also a couple of options for creating some stubs which inherit a class, implement interfaces or use traits.</p>
-<p>Examples using <code>'extends'</code>:</p>
-<pre><code class="language-php">it("makes a instance double with a parent class", function() {
-    $double = Double::instance(['extends' =&gt; 'Kahlan\Util\Text']);
+class MyReporter extends \Kahlan\Reporter\Terminal
+{
+    /**
+     * Callback called after a spec execution.
+     *
+     * @param object $log The log object of the whole spec.
+     */
+    public function specEnd($log = null)
+    {
+        switch($log-&gt;type()) {
+            case 'passed':
+                $this-&gt;write('✓', "green");
+            break;
+            case 'skipped':
+                $this-&gt;_write('S');
+            break;
+            case 'pending':
+                $this-&gt;_write('P', 'cyan');
+            break;
+            case 'excluded':
+                $this-&gt;_write('X', 'yellow');
+            break;
+            case 'failed':
+                '☠', "red");
+                $this-&gt;write("\n");
+                $this-&gt;_report($log);
+            break;
+            case 'errored':
+                $this-&gt;write('☠', "magenta");
+                $this-&gt;write("\n");
+                $this-&gt;_report($log);
+            break;
+        }
+    }
 
-    expect(is_object($double))-&gt;toBe(true);
-    expect(get_parent_class($double))-&gt;toBe('Kahlan\Util\Text');
-});</code></pre>
-<p><strong>Tip:</strong> If you extend an abstract class, all missing methods will be automatically added to your stub.</p>
-<p><strong>Note:</strong> If the <code>'extends'</code> option is used, magic methods <strong>won't be included</strong>, so as to avoid any conflict between your tested classes and the magic methods.</p>
-<p>However, if you still want to include magic methods with the <code>'extends'</code> option, you can manually set the <code>'magicMethods'</code> option to <code>true</code>:</p>
-<pre><code class="language-php">it("makes a instance double with a parent class and keeps magic methods", function() {
-    $double = Double::instance([
-        'extends'      =&gt; 'Kahlan\Util\Text',
-        'magicMethods' =&gt; true
-    ]);
+    /**
+     * Callback called at the end of specs processing.
+     *
+     * @param object $summary The execution summary instance.
+     */
+    public function end($summary)
+    {
+        $this-&gt;write('total:' . $summary-&gt;total() . "\n");
+        $this-&gt;write('passed:' . $summary-&gt;passed() . "\n");
+        $this-&gt;write('pending:' . $summary-&gt;pending() . "\n");
+        $this-&gt;write('skipped:' . $summary-&gt;skipped() . "\n");
+        $this-&gt;write('excluded:' . $summary-&gt;excluded() . "\n");
+        $this-&gt;write('failed:' . $summary-&gt;failed() . "\n");
+        $this-&gt;write('errored:'. $summary-&gt;errored() . "\n");
+    }
+}
+?&gt;</code></pre>
+<p><strong>Note:</strong> <code>_report()</code> is an inherited method. Its role is to print a report of passed log as parameter. Feel free to dig into the source code if you want some more specific output for that.</p>
+<p>The next step is to register your new reporter so you'll need to create you own custom <a href="config-file.html">config file</a>).</p>
+<p>Example of config file:</p>
+<pre><code class="language-php">&lt;?php
+use Kahlan\Filter\Filter;
+use My\Namespace\Reporter\MyReporter;
 
-    expect($double)-&gt;toReceive('__get')-&gt;ordered;
-    expect($double)-&gt;toReceive('__set')-&gt;ordered;
-    expect($double)-&gt;toReceive('__isset')-&gt;ordered;
-    expect($double)-&gt;toReceive('__unset')-&gt;ordered;
-    expect($double)-&gt;toReceive('__sleep')-&gt;ordered;
-    expect($double)-&gt;toReceive('__toString')-&gt;ordered;
-    expect($double)-&gt;toReceive('__invoke')-&gt;ordered;
-    expect(get_class($double))-&gt;toReceive('__wakeup')-&gt;ordered;
-    expect(get_class($double))-&gt;toReceiveNext('__clone')-&gt;ordered;
+// The logic to inlude into the workflow.
+Filter::register('kahlan.myconsole', function($chain) {
+    $reporters = $this-&gt;reporters();
+    $reporters-&gt;add('myconsole', new MyReporter(['start' =&gt; $this-&gt;_start));
+});
 
-    $prop = $double-&gt;prop;
-    $double-&gt;prop = $prop;
-    isset($double-&gt;prop);
-    unset($double-&gt;prop);
-    $serialized = serialize($double);
-    $string = (string) $double;
-    $double();
-    unserialize($serialized);
-    $double2 = clone $double;
-});</code></pre>
-<p>And it's also possible to extends built-in PHP classes.</p>
-<pre><code class="language-php">it("makes a instance double of a PHP core class", function() {
-    $redis = Double::instance(['extends' =&gt; 'Redis']);
-    allow($redis)-&gt;toReceive('connect')-&gt;andReturn(true);
-
-    expect($redis-&gt;connect('127.0.0.1'))-&gt;toBe(true);
-});</code></pre>
-<p>If you need your stub to implement a couple of interfaces you can use the <code>'implements'</code> option like so:</p>
-<pre><code class="language-php">it("makes a instance double implementing some interfaces", function() {
-    $double = Double::instance(['implements' =&gt; ['ArrayAccess', 'Iterator']]);
-    $interfaces = class_implements($double);
-
-    expect($interfaces)-&gt;toHaveLength(3);
-    expect(isset($interfaces['ArrayAccess']))-&gt;toBe(true);
-    expect(isset($interfaces['Iterator']))-&gt;toBe(true);
-    expect(isset($interfaces['Traversable']))-&gt;toBe(true); //Comes with `'Iterator'`
-});</code></pre>
-<p>And if you need your stub to implement a couple of traits you can use the <code>'uses'</code> option like so:</p>
-<pre><code class="language-php">it("makes a instance double using a trait", function() {
-    $double = Double::instance(['uses' =&gt; 'spec\mock\plugin\stub\HelloTrait']);
-
-    expect($double-&gt;hello())-&gt;toBe('Hello World From Trait!');
-});</code></pre>
-<p><strong>Note:</strong> Generated stubs implements by default <code>__call()</code>, <code>__callStatic()</code>,<code>__get()</code>, <code>__set()</code> and some other magic methods for a maximum of polyvalence.</p>
-<p>So <code>allow()</code> on stubs can be applied on any method name. Under the hood <code>__call()</code> will catch everything. You should pay attention that <code>method_exists</code> won't work on this &quot;virtual method stubs&quot;. To make it works, you will need to add the necessary &quot;endpoint(s)&quot; using the <code>'methods'</code> option like in the following example:</p>
-<pre><code class="language-php">it("adds a custom endpoint", function() {
-    $double = Double::instance(['methods' =&gt; ['myMethod']]);
-
-    expect(method_exists($double, 'myMethod'))-&gt;toBe(true);
-});</code></pre>
-<h3><a name="class-double"></a>Class Double</h3>
-<p>You can also create class double names (i.e a string) using <code>Double::classname()</code>:</p>
-<pre><code class="language-php">it("makes a class double", function() {
-    $class = Double::classname();
-    expect(is_string($class))-&gt;toBe(true);
-
-    $double = new $class()
-    expect($double)-&gt;toBeAnInstanceOf($class);
-});</code></pre>
+// Apply our logic to the `'console'` entry point.
+Filter::apply($this, 'console', 'kahlan.myconsole');
+?&gt;</code></pre>
+<p><code>$this-&gt;_start</code> is the timestamp in micro seconds of when the process has been started. If passed to reporter, it'll be able to display an accurate execution time.</p>
+<p><strong>Note:</strong> <code>'myconsole'</code> is an arbitrary name, it can be anything.</p>
+<p>Let's run it:</p>
+<pre><code class="language-php">./bin/kahlan --config=my-config.php</code></pre>
+<p><img src="assets/custom_reporter.png" alt="custom_reporter" /></p>
+<p>A bit ugly, but the check marks and the skulls are present.</p>
                 </section>
 
             </div>

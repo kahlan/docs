@@ -86,6 +86,18 @@
                                 </li>
                                                     </ul>
 
+                        <hr/>
+
+                        <div class="archive">
+                            <span>Archives</span>
+                            <ul class="nav nav-pills nav-stacked">
+                                <li>
+                                    <a href="3.x/index.html">
+                                        V3 docs
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </nav>
 
                 
@@ -95,17 +107,14 @@
 <p>You will need to configure your Kahlan config file to manually add to the Composer autoloader which are &quot;outside the composer scope&quot;.</p>
 <h3 id="working-with-a-psr-0-compatible-architecture">Working with a PSR-0 compatible architecture.</h3>
 <p>Let's take a situation where you have the following directories: <code>app/models/</code> and  <code>app/controllers/</code> and each one are respectively attached to the <code>Api\Models</code> and <code>Api\Controllers</code> namespaces. To autoload them with Kahlan you will need to manually add these PSR-4 namespaces in your <strong>kahlan-config.php</strong> config file:</p>
-<pre><code class="language-php">use Kahlan\Filter\Filter;
+<pre><code class="language-php">use Kahlan\Filter\Filters;
 
-Filter::register('mycustom.namespaces', function($chain) {
-
+Filters::apply($this, 'namespaces', function($chain) {
   $this-&gt;autoloader()-&gt;addPsr4('Api\\Models\\', __DIR__ . '/app/models/');
   $this-&gt;autoloader()-&gt;addPsr4('Api\\Controllers\\', __DIR__ . '/app/controllers/');
   return $chain-&gt;next();
 
-});
-
-Filter::apply($this, 'namespaces', 'mycustom.namespaces');</code></pre>
+});</code></pre>
 <h3 id="laravel">Laravel</h3>
 <p>To import all Laravel &quot;test facilities&quot; into Kahlan you can make use of <a href="https://github.com/jarektkaczyk/laravel-kahlan">this dedicated plugin</a>.</p>
 <h3 id="symfony">Symfony</h3>
@@ -113,7 +122,7 @@ Filter::apply($this, 'namespaces', 'mycustom.namespaces');</code></pre>
 Symfony ServiceContainer is then available in your spec files and you just have to launch <code>php app/console kahlan:run</code> with usual options.</p>
 <h3 id="atom">Atom</h3>
 <p>You can now develop your kahlan tests in Atom with autocompletion thanks to <a href="https://github.com/elephantly/atom-kahlan">atom-kahlan</a>.
-Just go in your favorite editor's settings and install the package. </p>
+Just go in your favorite editor's settings and install the package.</p>
 <h3 id="phalcon">Phalcon</h3>
 <p>When a class extends a built-in class (i.e. a non PHP class) it's not possible to stub parent class methods since they are not in PHP userland.</p>
 <p>Long story short, let's take the following example as an illustration:</p>
@@ -146,30 +155,25 @@ describe("MyModel", function() {
 <p>Unfortunately it doesn't work out of the box because <code>MyModel</code> extends <code>Phalcon\Mvc\Model</code> which is a core class (i.e a class compiled from C sources). So <code>MyModel::findFirst()</code> doesn't exist in PHP userland and can't be stubbed.</p>
 <p>The workaround here is to add the Kahlan's <code>Layer</code> patcher in <a href="config-file.html">your <code>kahlan-config.php</code> file</a>. The <code>Layer</code> patcher will dynamically replace all <code>extends</code> done on core class to an intermediate layer class in PHP.</p>
 <p>So for our example above, the <code>Layer</code> patcher can be configured like the following in <a href="config-file.html">your <code>kahlan-config.php</code> file</a>:</p>
-<pre><code class="language-php">use Kahlan\Filter\Filter;
-use Kahlan\Jit\Interceptor;
+<pre><code class="language-php">use Kahlan\Filter\Filters;
 use Kahlan\Jit\Patcher\Layer;
 
-Filter::register('api.patchers', function($chain) {
-    $interceptor = Interceptor::instance();
-    $patchers = $interceptor-&gt;patchers();
-    $patchers-&gt;add('layer', new Layer([
+Filters::apply($this, 'patchers', function($chain) {
+    $this-&gt;autoloader()-&gt;patchers()-&gt;add('layer', new Layer([
         'override' =&gt; [
             'Phalcon\Mvc\Model' // apply a layer on top of all classes extending `Phalcon\Mvc\Model`.
         ]
     ]));
 
     return $chain-&gt;next();
-});
-
-Filter::apply($this, 'patchers', 'api.patchers');</code></pre>
+});</code></pre>
 <p><strong>Note:</strong> You will probably need to remove all cached files using <code>kahlan --cc</code>.</p>
 <h3 id="working-with-a-custom-autoloader-not-compatible-with-psr-0">Working with a custom autoloader not compatible with PSR-0.</h3>
 <p>If you need to load non PSR-0 compatible classes simply add &quot;composer/composer&quot;: &quot;^1.2&quot; in your require-dev section and use Composer\Autoload\ClassMapGenerator; in your kahlan config file to generate a class map. For example, when you need to use it in <a href="https://codeigniter.com/">CodeIgniter &lt;=3.1.2</a>, you can do the following:</p>
-<pre><code class="language-php">use Kahlan\Filter\Filter;
+<pre><code class="language-php">use Kahlan\Filter\Filters;
 use Composer\Autoload\ClassMapGenerator;
 
-Filter::register('custom.autoloader', function($chain) {
+Filters::apply($this, 'namespaces', function($chain) {
     $this-&gt;autoloader()-&gt;addClassMap(
         ClassMapGenerator::createMap(BASEPATH . 'core')
     );
@@ -181,8 +185,7 @@ Filter::register('custom.autoloader', function($chain) {
     );
 
     return $chain-&gt;next();
-});
-Filter::apply($this, 'namespaces', 'custom.autoloader');</code></pre>
+});</code></pre>
                 </section>
 
             </div>

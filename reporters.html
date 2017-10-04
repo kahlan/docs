@@ -86,6 +86,18 @@
                                 </li>
                                                     </ul>
 
+                        <hr/>
+
+                        <div class="archive">
+                            <span>Archives</span>
+                            <ul class="nav nav-pills nav-stacked">
+                                <li>
+                                    <a href="3.x/index.html">
+                                        V3 docs
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </nav>
 
                 
@@ -165,17 +177,14 @@ class MyReporter extends \Kahlan\Reporter\Terminal
 <p>The next step is to register your new reporter so you'll need to create you own custom <a href="config-file.html">config file</a>).</p>
 <p>Example of config file:</p>
 <pre><code class="language-php">&lt;?php
-use Kahlan\Filter\Filter;
+use Kahlan\Filter\Filters;
 use My\Namespace\Reporter\MyReporter;
 
-// The logic to inlude into the workflow.
-Filter::register('kahlan.myconsole', function($chain) {
+// Apply our logic to the `'console'` entry point.
+Filters::apply($this, 'console', function($chain) {
     $reporters = $this-&gt;reporters();
     $reporters-&gt;add('myconsole', new MyReporter(['start' =&gt; $this-&gt;_start));
 });
-
-// Apply our logic to the `'console'` entry point.
-Filter::apply($this, 'console', 'kahlan.myconsole');
 ?&gt;</code></pre>
 <p><code>$this-&gt;_start</code> is the timestamp in micro seconds of when the process has been started. If passed to reporter, it'll be able to display an accurate execution time.</p>
 <p><strong>Note:</strong> <code>'myconsole'</code> is an arbitrary name, it can be anything.</p>
