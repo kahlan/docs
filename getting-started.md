@@ -18,7 +18,7 @@ The recommended way to install Kahlan is with [Composer](http://getcomposer.org/
 composer require --dev kahlan/kahlan
 ```
 
-Alternatively, you may manually add `"kahlan/kahlan": "~3.0"` to the `require-dev` dependencies within your `composer.json`.
+Alternatively, you may manually add `"kahlan/kahlan": "~4.0"` to the `require-dev` dependencies within your `composer.json`.
 
 The Kahlan package is installed with a vendor library and its binary accessible through `vendor/bin/kahlan` by default. However, you can [configure](https://getcomposer.org/doc/articles/vendor-binaries.md#can-vendor-binaries-be-installed-somewhere-other-than-vendor-bin-) its location like all other composer vendor binaries.
 
