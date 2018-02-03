@@ -15,10 +15,10 @@ Let's take a situation where you have the following directories: `app/models/` a
 ```php
 use Kahlan\Filter\Filters;
 
-Filters::apply($this, 'namespaces', function($chain) {
+Filters::apply($this, 'namespaces', function($next) {
   $this->autoloader()->addPsr4('Api\\Models\\', __DIR__ . '/app/models/');
   $this->autoloader()->addPsr4('Api\\Controllers\\', __DIR__ . '/app/controllers/');
-  return $chain->next();
+  return $next();
 
 });
 ```
@@ -87,14 +87,14 @@ So for our example above, the `Layer` patcher can be configured like the followi
 use Kahlan\Filter\Filters;
 use Kahlan\Jit\Patcher\Layer;
 
-Filters::apply($this, 'patchers', function($chain) {
+Filters::apply($this, 'patchers', function($next) {
     $this->autoloader()->patchers()->add('layer', new Layer([
         'override' => [
             'Phalcon\Mvc\Model' // apply a layer on top of all classes extending `Phalcon\Mvc\Model`.
         ]
     ]));
 
-    return $chain->next();
+    return $next();
 });
 ```
 
@@ -108,7 +108,7 @@ If you need to load non PSR-0 compatible classes simply add "composer/composer":
 use Kahlan\Filter\Filters;
 use Composer\Autoload\ClassMapGenerator;
 
-Filters::apply($this, 'namespaces', function($chain) {
+Filters::apply($this, 'namespaces', function($next) {
     $this->autoloader()->addClassMap(
         ClassMapGenerator::createMap(BASEPATH . 'core')
     );
@@ -119,6 +119,6 @@ Filters::apply($this, 'namespaces', function($chain) {
         ClassMapGenerator::createMap(APPPATH . 'models')
     );
 
-    return $chain->next();
+    return $next();
 });
 ```
