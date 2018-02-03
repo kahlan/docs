@@ -1,5 +1,5 @@
 <div class="logo">
-  <img src="img/logo.png" title="Kahlan"/>
+  <img src="assets/logo.png" title="Kahlan"/>
 </div>
 > The PHP Test Framework for Freedom, Truth, and Justice
 

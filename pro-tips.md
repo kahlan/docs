@@ -36,7 +36,7 @@ Example:
 ./bin/kahlan --coverage="Kahlan\Reporter\Coverage\Driver\Xdebug::stop()"
 ```
 
-![warning](img/warning.png) don't forget to correctly set the `--src` option if your source directory is not `src/`.
+![warning](assets/warning.png) don't forget to correctly set the `--src` option if your source directory is not `src/`.
 
 Will give you the detailed code coverage of the `Xdebug::stop()` method.
 
