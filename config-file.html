@@ -119,14 +119,14 @@ $commandLine-&gt;option('coverage-scrutinizer', 'default', 'scrutinizer.xml');
 $commandLine-&gt;option('coverage-coveralls', 'default', 'coveralls.json');
 
 // Apply the logic to the `'reporting'` entry point.
-Filters::apply('$this, 'reporting', function($chain) {
+Filters::apply('$this, 'reporting', function($next) {
 
     // Get the reporter called `'coverage'` from the list of reporters
     $reporter = $this-&gt;reporters()-&gt;get('coverage');
 
     // Abort if no coverage is available.
     if (!$reporter || !$this-&gt;commandLine()-&gt;exists('coverage-coveralls')) {
-        return $chain-&gt;next();
+        return $next();
     }
 
     // Use the `Coveralls` class to write the JSON coverage into a file
@@ -138,7 +138,7 @@ Filters::apply('$this, 'reporting', function($chain) {
     ]);
 
     // Continue the chain
-    return $chain-&gt;next();
+    return $next();
 });
 ?&gt;</code></pre>
 <p>See <a href="https://github.com/kahlan/kahlan/blob/3.1.14/kahlan-config.travis.php"><code>kahlan-config.travis.php</code></a> for a more complete configuration example.</p>

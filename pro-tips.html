@@ -145,10 +145,10 @@ cd lcov
 genhtml coverage.info</code></pre>
 <h3 id="injecting-variables-at-root-scope">Injecting variables at root scope</h3>
 <p>To inject some variables to all scopes (e.g. database connection, helpers, etc.) and make it available in all you specs, one solution is to configure you <code>kahlan-config.php</code> file like the following:</p>
-<pre><code class="language-php">Filters::apply($this, 'run', function($chain) {
+<pre><code class="language-php">Filters::apply($this, 'run', function($next) {
     $scope = $this-&gt;suite()-&gt;root()-&gt;scope(); // The top most describe scope.
     $scope-&gt;global = 'MyVariable';
-    return $chain-&gt;next();
+    return $next();
 });</code></pre>
 <p>Then you can get it in any scopes like in the following:</p>
 <pre><code class="language-php">describe("My Spec", function() {

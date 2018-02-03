@@ -181,7 +181,7 @@ use Kahlan\Filter\Filters;
 use My\Namespace\Reporter\MyReporter;
 
 // Apply our logic to the `'console'` entry point.
-Filters::apply($this, 'console', function($chain) {
+Filters::apply($this, 'console', function($next) {
     $reporters = $this-&gt;reporters();
     $reporters-&gt;add('myconsole', new MyReporter(['start' =&gt; $this-&gt;_start));
 });

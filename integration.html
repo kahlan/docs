@@ -109,10 +109,10 @@
 <p>Let's take a situation where you have the following directories: <code>app/models/</code> and  <code>app/controllers/</code> and each one are respectively attached to the <code>Api\Models</code> and <code>Api\Controllers</code> namespaces. To autoload them with Kahlan you will need to manually add these PSR-4 namespaces in your <strong>kahlan-config.php</strong> config file:</p>
 <pre><code class="language-php">use Kahlan\Filter\Filters;
 
-Filters::apply($this, 'namespaces', function($chain) {
+Filters::apply($this, 'namespaces', function($next) {
   $this-&gt;autoloader()-&gt;addPsr4('Api\\Models\\', __DIR__ . '/app/models/');
   $this-&gt;autoloader()-&gt;addPsr4('Api\\Controllers\\', __DIR__ . '/app/controllers/');
-  return $chain-&gt;next();
+  return $next();
 
 });</code></pre>
 <h3 id="laravel">Laravel</h3>
@@ -158,14 +158,14 @@ describe("MyModel", function() {
 <pre><code class="language-php">use Kahlan\Filter\Filters;
 use Kahlan\Jit\Patcher\Layer;
 
-Filters::apply($this, 'patchers', function($chain) {
+Filters::apply($this, 'patchers', function($next) {
     $this-&gt;autoloader()-&gt;patchers()-&gt;add('layer', new Layer([
         'override' =&gt; [
             'Phalcon\Mvc\Model' // apply a layer on top of all classes extending `Phalcon\Mvc\Model`.
         ]
     ]));
 
-    return $chain-&gt;next();
+    return $next();
 });</code></pre>
 <p><strong>Note:</strong> You will probably need to remove all cached files using <code>kahlan --cc</code>.</p>
 <h3 id="working-with-a-custom-autoloader-not-compatible-with-psr-0">Working with a custom autoloader not compatible with PSR-0.</h3>
@@ -173,7 +173,7 @@ Filters::apply($this, 'patchers', function($chain) {
 <pre><code class="language-php">use Kahlan\Filter\Filters;
 use Composer\Autoload\ClassMapGenerator;
 
-Filters::apply($this, 'namespaces', function($chain) {
+Filters::apply($this, 'namespaces', function($next) {
     $this-&gt;autoloader()-&gt;addClassMap(
         ClassMapGenerator::createMap(BASEPATH . 'core')
     );
@@ -184,7 +184,7 @@ Filters::apply($this, 'namespaces', function($chain) {
         ClassMapGenerator::createMap(APPPATH . 'models')
     );
 
-    return $chain-&gt;next();
+    return $next();
 });</code></pre>
                 </section>
 
