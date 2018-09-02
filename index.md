@@ -60,6 +60,7 @@ To contribute to Kahlan, [open a pull request](https://help.github.com/articles/
 - [Test Double](test-double.md)
     - [Instance Double](test-double.md#instance-double)
     - [Class Double](test-double.md#class-double)
+    - [Shortcuts](test-double.md#shortcuts)
 - [Quit Statement Patching](quit.md)
 - [CLI Options](cli-options.md)
 - [Reporters](reporters.md)
