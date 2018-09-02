@@ -190,6 +190,25 @@
     $double = new $class()
     expect($double)-&gt;toBeAnInstanceOf($class);
 });</code></pre>
+<h3><a name="shortcuts"></a>Shortcuts</h3>
+<p>Instead of using <code>allow()</code> for stubbing each single methods of a <code>Double</code> instance, a <code>Double</code> can also be &quot;preconfigured&quot; with some stub and/or fake methods like so:</p>
+<pre><code class="language-php">it("stubs a method by setting a return value", function() {
+    $instance = \Kahlan\Plugin\Double::instance([
+        'stubMethods' =&gt; [
+            'foo' =&gt; 'bar'
+        ]
+    ]);
+    expect($instance-&gt;foo())-&gt;toBe('bar');
+});
+
+it("sets a closure as a fake method", function() {
+    $instance = \Kahlan\Plugin\Double::instance([
+        'fakeMethods' =&gt; [
+            'foo' =&gt; function () { return 'bar'; }
+        ]
+    ]);
+    expect($instance-&gt;foo())-&gt;toBe('bar');
+});</code></pre>
                 </section>
 
             </div>
