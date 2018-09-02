@@ -159,3 +159,26 @@ it("shows some examples of function stubbing", function() {
     allow('PDO')->toBeOK();
 });
 ```
+
+### <a name="shortcuts"></a>Shortcuts
+
+When you create a double you can quickly set up stub and fake methods:
+```php
+it("stubs a method by setting a return value", function() {
+    $instance = \Kahlan\Plugin\Double::instance([
+        'stubMethods' => [
+            'foo' => 'bar'
+        ]
+    ]);
+    expect($instance->foo())->toBe('bar');
+});
+
+it("sets a closure as a fake method", function() {
+    $instance = \Kahlan\Plugin\Double::instance([
+        'fakeMethods' => [
+            'foo' => function () { return 'bar'; }
+        ]
+    ]);
+    expect($instance->foo())->toBe('bar');
+});
+```
