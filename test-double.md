@@ -134,7 +134,7 @@ it("makes a class double", function() {
 
 ### <a name="shortcuts"></a>Shortcuts
 
-Instead of using `allow()` for stubbing each single methods of a `Double` instance, a `Double` can also be "preconfigured" with some stub and/or fake methods like so:
+Instead of using `allow()` for stubbing each single method of a `Double` instance, a `Double` can also be "preconfigured" with some stub and/or fake methods like so:
 ```php
 it("stubs a method by setting a return value", function() {
     $instance = \Kahlan\Plugin\Double::instance([
