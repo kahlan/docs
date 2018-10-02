@@ -6,6 +6,8 @@ currentMenu: allow
 
 A method stub or simply stub in software development is used to stand in for some other programming functionality. This section explains how to perform such replacement with Kahlan.
 
+**Note:** stubs & monkey patching only works **for classes loaded by Composer**.
+
 ### Method Stubbing
 
 Use `allow()` to stub an existing method on any class like so:
