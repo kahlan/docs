@@ -104,6 +104,7 @@
                 <section id="content" class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
                     <h2 id="stubs-amp-monkey-patching-dsl">Stubs &amp; Monkey Patching DSL</h2>
 <p>A method stub or simply stub in software development is used to stand in for some other programming functionality. This section explains how to perform such replacement with Kahlan.</p>
+<p><strong>Note:</strong> stubs &amp; monkey patching only works <strong>for classes loaded by Composer</strong>.</p>
 <h3 id="method-stubbing">Method Stubbing</h3>
 <p>Use <code>allow()</code> to stub an existing method on any class like so:</p>
 <pre><code class="language-php">it("stubs a method by setting a return value", function() {
