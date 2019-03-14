@@ -25,7 +25,10 @@ Filters::apply($this, 'namespaces', function($next) {
 
 ### Laravel
 
-To import all Laravel "test facilities" into Kahlan you can make use of [this dedicated plugin](https://github.com/jamesst20/kahlan-laravel).
+To import all Laravel "test facilities" into Kahlan you can make use of the following dedicated plugins:
+
+- [sofa/laravel-kahlan](https://github.com/jarektkaczyk/laravel-kahlan)
+- [jamesst20/kahlan-laravel](https://github.com/jamesst20/kahlan-laravel)
 
 ### Symfony
 
