@@ -241,7 +241,7 @@ it("expects $foo to receive message() and bail out using a stub", function() {
 it("expects $foo to receive message() and bail out using a closure for stub", function() {
     $foo = new Foo();
 
-    expect($foo)->toReceive('message')->andRun(function() {
+    allow($foo)->toReceive('message')->andRun(function() {
         return 'something';
     });
     expect($foo->message('My Message'))->toBe('something');
