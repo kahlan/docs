@@ -248,7 +248,7 @@
 <pre><code class="language-php">it("expects $foo to receive message() and bail out using a closure for stub", function() {
     $foo = new Foo();
 
-    expect($foo)-&gt;toReceive('message')-&gt;andRun(function() {
+    allow($foo)-&gt;toReceive('message')-&gt;andRun(function() {
         return 'something';
     });
     expect($foo-&gt;message('My Message'))-&gt;toBe('something');
