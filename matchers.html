@@ -263,8 +263,8 @@
 });</code></pre>
 <pre><code class="language-php">it("expects Foo to receive ::message() with the correct param a specified number of times", function() {
     expect(Foo::class)-&gt;toReceive('::message')-&gt;with('My Message')-&gt;times(2);
-    $foo::message('My Message');
-    $foo::message('My Message');
+    Foo::message('My Message');
+    Foo::message('My Message');
 });</code></pre>
 <pre><code class="language-php">it("expects $foo to receive message() followed by foo()", function() {
     $foo = new Foo();
