@@ -40,6 +40,9 @@ menu:
         reporters:
             text: Reporters
             relativeUrl: reporters.html
+        code-coverage:
+            text: Code Coverage
+            relativeUrl: code-coverage.html
         pro-tips:
             text: Pro Tips
             relativeUrl: pro-tips.html

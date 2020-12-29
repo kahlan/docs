@@ -1,5 +1,5 @@
 <div class="logo">
-  <img src="assets/logo.png" title="Kahlan"/>
+  <img src="../assets/logo.png" title="Kahlan"/>
 </div>
 > The PHP Test Framework for Freedom, Truth, and Justice
 
@@ -64,7 +64,6 @@ To contribute to Kahlan, [open a pull request](https://help.github.com/articles/
 - [Quit Statement Patching](quit.md)
 - [CLI Options](cli-options.md)
 - [Reporters](reporters.md)
-- [Code coverage](code-coverage.md)
 - [Pro Tips](pro-tips.md) - including CLI arguments
 - [The `kahlan-config.php` file](config-file.md)
 - [Integration with popular frameworks](integration.md)
