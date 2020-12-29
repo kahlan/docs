@@ -69,6 +69,11 @@
                                         Reporters
                                     </a>
                                 </li>
+                                                            <li class="">
+                                    <a href="https://kahlan.github.io/docs/code-coverage.html">
+                                        Code Coverage
+                                    </a>
+                                </li>
                                                             <li class="active">
                                     <a href="https://kahlan.github.io/docs/pro-tips.html">
                                         Pro Tips
@@ -96,6 +101,11 @@
                                         V3 docs
                                     </a>
                                 </li>
+                                <li>
+                                    <a href="4.x/index.html">
+                                        V4 docs
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                     </nav>
@@ -107,55 +117,6 @@
 <p><code>--ff</code> is the fast fail option. If used, the test suite will be stopped as soon as a failing test occurs. You can also specify a number of &quot;allowed&quot; fails before stopping the process. For example:</p>
 <pre><code>./bin/kahlan --ff=3</code></pre>
 <p>will stop the process as soon as 3 specs <code>it</code> failed.</p>
-<h3 id="use">Use <code>--coverage</code> option</h3>
-<p>Kahlan has some built-in code coverage exporter (e.g. Coveralls &amp; Scrutinizer exporters) but it can also be used to generates some detailed code coverage report directly inside the console.</p>
-<p><strong><code>--coverage=&lt;integer&gt;</code></strong> will generates some code coverage summary depending on the passed integer.</p>
-<ul>
-<li>0: no coverage</li>
-<li>1: code coverage summary of the whole project</li>
-<li>2: code coverage summary detailed by namespaces</li>
-<li>3: code coverage summary detailed by classes</li>
-<li>4: code coverage summary detailed by methods</li>
-</ul>
-<p>However sometimes it's interesting to see in details all covered/uncovered lines. To achieve this, you can pass a string to the <code>--coverage</code> option.</p>
-<p><strong><code>--coverage=&lt;string&gt;</code></strong> will generates some detailed code coverage according to the specified namespace, class or method definition.</p>
-<p>Example:</p>
-<pre><code class="language-php">./bin/kahlan --coverage="Kahlan\Reporter\Coverage\Driver\Xdebug::stop()"</code></pre>
-<p><img src="assets/warning.png" alt="warning" /> don't forget to correctly set the <code>--src</code> option if your source directory is not <code>src/</code>.</p>
-<p>Will give you the detailed code coverage of the <code>Xdebug::stop()</code> method.</p>
-<p><img src="assets/code_coverage.png" alt="code_coverage_example" /></p>
-<p><strong>Note:</strong>
-All available namespaces, classes or methods definitions can be extracted from a simple <code>--coverage=4</code> code coverage summary.</p>
-<p><strong>Note:</strong>
-You can use PHPDBG code coverage capabilities to generate code coverage report through the following command line:</p>
-<pre><code class="language-bash">phpdbg -qrr ./bin/kahlan --coverage</code></pre>
-<p>Warning: while 80% faster than Xdebug it's currently not as accurate as Xdebug and more prone to Fatal Errors.</p>
-<p><strong><code>--istanbul=&lt;file&gt;</code></strong></p>
-<p>You can also create an HTML Code Coverage report using istanbul like so:</p>
-<pre><code class="language-bash">npm install -g istanbul
-./bin/kahlan --istanbul="coverage.json"
-istanbul report</code></pre>
-<p>You'll find the HTML Code Coverage report in <code>coverage/lcov-report/index.html</code>.</p>
-<p><strong><code>--lcov=&lt;file&gt;</code></strong></p>
-<p>You can also use <code>genhtml</code> (from the <a href="http://ltp.sourceforge.net/coverage/lcov.php">lcov</a> package):</p>
-<pre><code class="language-bash">sudo apt-get install lcov
-mkdir lcov
-./bin/kahlan --lcov="lcov/coverage.info"
-cd lcov
-genhtml coverage.info</code></pre>
-<h3 id="injecting-variables-at-root-scope">Injecting variables at root scope</h3>
-<p>To inject some variables to all scopes (e.g. database connection, helpers, etc.) and make it available in all you specs, one solution is to configure you <code>kahlan-config.php</code> file like the following:</p>
-<pre><code class="language-php">Filters::apply($this, 'run', function($next) {
-    $scope = $this-&gt;suite()-&gt;root()-&gt;scope(); // The top most describe scope.
-    $scope-&gt;global = 'MyVariable';
-    return $next();
-});</code></pre>
-<p>Then you can get it in any scopes like in the following:</p>
-<pre><code class="language-php">describe("My Spec", function() {
-    it("echoes the global", function() {
-        echo $this-&gt;global;
-    });
-});</code></pre>
 <h3 id="use-the-focused-mode">Use the focused mode</h3>
 <p>When writing your tests sometimes you want to <strong>only execute</strong> the test(s) you are working on. For this, you can prefix your spec with an &quot;f&quot; like in the following example:</p>
 <pre><code class="language-php">describe("test focused mode", function() {
@@ -178,6 +139,19 @@ genhtml coverage.info</code></pre>
     skipIf(date("w") == 0 || date("w") == 6);
 
     expect(true)-&gt;toBe(true);
+});</code></pre>
+<h3 id="injecting-variables-at-root-scope">Injecting variables at root scope</h3>
+<p>To inject some variables to all scopes (e.g. database connection, helpers, etc.) and make it available in all you specs, one solution is to configure you <code>kahlan-config.php</code> file like the following:</p>
+<pre><code class="language-php">Filters::apply($this, 'run', function($next) {
+    $scope = $this-&gt;suite()-&gt;root()-&gt;scope(); // The top most describe scope.
+    $scope-&gt;global = 'MyVariable';
+    return $next();
+});</code></pre>
+<p>Then you can get it in any scopes like in the following:</p>
+<pre><code class="language-php">describe("My Spec", function() {
+    it("echoes the global", function() {
+        echo $this-&gt;global;
+    });
 });</code></pre>
                 </section>
 

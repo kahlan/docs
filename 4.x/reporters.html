@@ -24,7 +24,7 @@
                     <nav id="sidebar" class="col-sm-3 col-lg-2" role="navigation">
 
                         <ul class="nav nav-pills nav-stacked">
-                                                            <li class="active">
+                                                            <li class="">
                                     <a href="https://kahlan.github.io/docs/index.html">
                                         Overview
                                     </a>
@@ -64,7 +64,7 @@
                                         CLI Options
                                     </a>
                                 </li>
-                                                            <li class="">
+                                                            <li class="active">
                                     <a href="https://kahlan.github.io/docs/reporters.html">
                                         Reporters
                                     </a>
@@ -112,77 +112,96 @@
 
                 
                 <section id="content" class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
-                    <div class="logo">
-  <img src="assets/logo.png" title="Kahlan">
-</div>
-<blockquote>
-<p>The PHP Test Framework for Freedom, Truth, and Justice</p>
-</blockquote>
-<p>Kahlan is a full-featured Unit &amp; BDD test framework a la RSpec/JSpec which uses a <code>describe-it</code> syntax and moves testing in PHP one step forward.</p>
-<p><strong>Kahlan allows to stub or monkey patch your code directly like in Ruby or JavaScript without any required PECL-extentions.</strong></p>
-<p><a name="features"></a></p>
-<h3 id="features">Features</h3>
-<ul>
-<li><code>describe-it</code> syntax similar to modern BDD testing frameworks</li>
-<li>Code Coverage metrics (<a href="http://xdebug.org">xdebug</a> or <a href="http://phpdbg.com/docs">phpdbg</a> required)</li>
-<li>Handy stubbing system (<a href="https://github.com/padraic/mockery">mockery</a> or <a href="https://github.com/phpspec/prophecy">prophecy</a> are no longer needed)</li>
-<li>Set stubs on your class methods directly (i.e allows dynamic mocking)</li>
-<li>Ability to Monkey Patch your code (i.e. allows replacement of core functions/classes on the fly)</li>
-<li>Check called methods on your classes/instances</li>
-<li>Built-in Reporters (Terminal or HTML reporting through <a href="https://gotwarlost.github.io/istanbul/">istanbul</a> or <a href="http://ltp.sourceforge.net/coverage/lcov.php">lcov</a>)</li>
-<li>Built-in Exporters (Coveralls, Code Climate, Scrutinizer, Clover)</li>
-<li>Extensible, customizable workflow</li>
-</ul>
-<p><a name="license"></a></p>
-<h2 id="license">License</h2>
-<p>Licensed using the <a href="http://opensource.org/licenses/MIT">MIT license</a>.</p>
-<blockquote>
-<p>The MIT License (MIT)</p>
-<p>Copyright (c) 2014 CrysaLEAD</p>
-<p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the &quot;Software&quot;), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
-<p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
-<p>THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
-</blockquote>
-<p><a name="contributing"></a></p>
-<h2 id="contributing">Contributing</h2>
-<p>To contribute to Kahlan, <a href="https://help.github.com/articles/creating-a-pull-request/">open a pull request</a> against the <code>dev</code> branch with your change. Be sure to update the specs to verify your change works as expected and to prevent regressions.</p>
-<h2 id="documentation">Documentation</h2>
-<ul>
-<li><a href="getting-started.html">Getting Started</a>
-<ul>
-<li><a href="getting-started.html#requirements">Requirements</a></li>
-<li><a href="getting-started.html#installation">Installation</a></li>
-<li><a href="getting-started.html#running-kahlan">Running Kahlan</a></li>
-<li><a href="getting-started.html#directory-structure">Directory Structure</a></li>
-</ul></li>
-<li><a href="dsl.html">DSL</a></li>
-<li><a href="matchers.html">Matchers</a>
-<ul>
-<li><a href="matchers.html#classic">Classic matchers</a></li>
-<li><a href="matchers.html#method">Method invocation matchers</a></li>
-<li><a href="matchers.html#argument">Argument matchers</a></li>
-<li><a href="matchers.html#custom">Custom matchers</a></li>
-</ul></li>
-<li><a href="allow.html">Method Stubbing &amp; Monkey Patching</a>
-<ul>
-<li><a href="allow.html#method-stubbing">Replacing a method</a></li>
-<li><a href="allow.html#function-stubbing">Replacing a function</a></li>
-<li><a href="allow.html#monkey-patching">Replacing a class</a></li>
-</ul></li>
-<li><a href="test-double.html">Test Double</a>
-<ul>
-<li><a href="test-double.html#instance-double">Instance Double</a></li>
-<li><a href="test-double.html#class-double">Class Double</a></li>
-<li><a href="test-double.html#shortcuts">Shortcuts</a></li>
-</ul></li>
-<li><a href="quit.html">Quit Statement Patching</a></li>
-<li><a href="cli-options.html">CLI Options</a></li>
-<li><a href="reporters.html">Reporters</a></li>
-<li><a href="code-coverage.html">Code coverage</a></li>
-<li><a href="pro-tips.html">Pro Tips</a> - including CLI arguments</li>
-<li><a href="config-file.html">The <code>kahlan-config.php</code> file</a></li>
-<li><a href="integration.html">Integration with popular frameworks</a></li>
-</ul>
+                    <h2 id="reporters">Reporters</h2>
+<p>Kahlan provides a flexible reporter system which can be extended easily.</p>
+<p>There are three build-in reporters and the default is the dotted one:</p>
+<pre><code class="language-php">./bin/kahlan --reporter=dot # Default value</code></pre>
+<p>You can optionally export reporter output to a file</p>
+<pre><code class="language-php">./bin/kahlan --reporter=dot:/some/file/path.txt</code></pre>
+<p>You can also use multiple reporters e.g.:</p>
+<pre><code class="language-php">./bin/kahlan --reporter=dot --reporter=json:/some/file/path.json</code></pre>
+<p>It can be pretty handy to do multiple reports at the same time.</p>
+<p>Note: don't use more than one reporter as console reporter otherwise the console outputs will be mixed altogether.</p>
+<p>To use a reporter which looks like more a progress bar use the following option:</p>
+<pre><code class="language-php">./bin/kahlan --reporter=bar
+./bin/kahlan --reporter=verbose</code></pre>
+<p>You can easily roll you own if these reporters don't fit your needs.</p>
+<p>For example, if you want a console based reporter, create a PHP class which extends <code>Kahlan\Reporter\Terminal</code>. The <code>Terminal</code> class offers some useful methods like <code>write()</code> for doing some echos on the terminal. But if you wanted to create some kind of JSON reporter extending from <code>Kahlan\Reporter\Reporter</code> would be enough.</p>
+<p>Example of a custom console reporter:</p>
+<pre><code class="language-php">&lt;?php
+namespace My\Namespace;
+
+class MyReporter extends \Kahlan\Reporter\Terminal
+{
+    /**
+     * Callback called after a spec execution.
+     *
+     * @param object $log The log object of the whole spec.
+     */
+    public function specEnd($log = null)
+    {
+        switch($log-&gt;type()) {
+            case 'passed':
+                $this-&gt;write('✓', "green");
+            break;
+            case 'skipped':
+                $this-&gt;_write('S');
+            break;
+            case 'pending':
+                $this-&gt;_write('P', 'cyan');
+            break;
+            case 'excluded':
+                $this-&gt;_write('X', 'yellow');
+            break;
+            case 'failed':
+                '☠', "red");
+                $this-&gt;write("\n");
+                $this-&gt;_report($log);
+            break;
+            case 'errored':
+                $this-&gt;write('☠', "magenta");
+                $this-&gt;write("\n");
+                $this-&gt;_report($log);
+            break;
+        }
+    }
+
+    /**
+     * Callback called at the end of specs processing.
+     *
+     * @param object $summary The execution summary instance.
+     */
+    public function end($summary)
+    {
+        $this-&gt;write('total:' . $summary-&gt;total() . "\n");
+        $this-&gt;write('passed:' . $summary-&gt;passed() . "\n");
+        $this-&gt;write('pending:' . $summary-&gt;pending() . "\n");
+        $this-&gt;write('skipped:' . $summary-&gt;skipped() . "\n");
+        $this-&gt;write('excluded:' . $summary-&gt;excluded() . "\n");
+        $this-&gt;write('failed:' . $summary-&gt;failed() . "\n");
+        $this-&gt;write('errored:'. $summary-&gt;errored() . "\n");
+    }
+}
+?&gt;</code></pre>
+<p><strong>Note:</strong> <code>_report()</code> is an inherited method. Its role is to print a report of passed log as parameter. Feel free to dig into the source code if you want some more specific output for that.</p>
+<p>The next step is to register your new reporter so you'll need to create you own custom <a href="config-file.html">config file</a>).</p>
+<p>Example of config file:</p>
+<pre><code class="language-php">&lt;?php
+use Kahlan\Filter\Filters;
+use My\Namespace\Reporter\MyReporter;
+
+// Apply our logic to the `'console'` entry point.
+Filters::apply($this, 'console', function($next) {
+    $reporters = $this-&gt;reporters();
+    $reporters-&gt;add('myconsole', new MyReporter(['start' =&gt; $this-&gt;_start));
+});
+?&gt;</code></pre>
+<p><code>$this-&gt;_start</code> is the timestamp in micro seconds of when the process has been started. If passed to reporter, it'll be able to display an accurate execution time.</p>
+<p><strong>Note:</strong> <code>'myconsole'</code> is an arbitrary name, it can be anything.</p>
+<p>Let's run it:</p>
+<pre><code class="language-php">./bin/kahlan --config=my-config.php</code></pre>
+<p><img src="../assets/custom_reporter.png" alt="custom_reporter" /></p>
+<p>A bit ugly, but the check marks and the skulls are present.</p>
                 </section>
 
             </div>
