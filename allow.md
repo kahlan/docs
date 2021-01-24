@@ -154,7 +154,9 @@ it("shows some examples of function stubbing", function() {
     // Monkey patch `PDO` with a specific class.
     allow('PDO')->toBe('My\Alternative\PDO');
 
-    // Monkey patch `DateTime` with a specific instance (PHP>=7 only).
+    // Monkey patch `DateTime` with a specific instance
+    // WARNING: instance substitution doesn't work by reference.
+    // Ex: `$date =& $obj->myDate()`, the date won't be substited here.
     allow('DateTime')->toBe(new DateTime('@123'));
 
     // Monkey patch `PDO` with a generic stub instance.
